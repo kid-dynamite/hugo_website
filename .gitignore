@@ -1,0 +1,14 @@
+# Temporärer Cache von Hugo und Ressourcen
+resources/_gen/
+.hugo_build.lock
+
+# Der lokale Ausgabeordner (wird von Netlify selbst generiert)
+public/
+
+# Node/Tailwind Abhängigkeiten (falls vorhanden)
+node_modules/
+.pnpm-store/
+
+# Betriebssystem-Dateien
+.DS_Store
+Thumbs.db
