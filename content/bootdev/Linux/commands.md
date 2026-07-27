@@ -11,3 +11,13 @@ git add .
 
 Den ersten Commit erstellen
 git commit -m "Erster sauberer Commit mit Favicons und Changelog"
+
+git branch -M main
+git remote add origin https://github.com/kid-dynamite/hugo_website
+git push -u origin main
+
+git config --global --unset credential.helper
+
+git add .
+git commit -m ""
+git push
