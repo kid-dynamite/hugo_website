@@ -26,6 +26,39 @@ wert = mein_dict.get("a")
 print(wert)
 ```
 
+> code without comments...
+
+```python
+def dict_depth(d, max_depth_so_far):
+    if not isinstance(d, dict) or not d:
+        return max_depth_so_far
+
+    current_max = max_depth_so_far
+
+    for v in d.values():
+        depth_of_subdict = dict_depth(v, max_depth_so_far + 1)
+
+        if depth_of_subdict > current_max:
+            current_max = depth_of_subdict
+
+    return current_max
+
+d = {
+    "melee_weapons": {
+        "stabbies": {
+            "spears": 4,
+            "knives": 3,
+        },
+        "bows": 6
+    }
+}
+
+ergebnis = dict_depth(d, 0)
+print(f"Die maximale Tiefe beträgt: {ergebnis}")
+```
+
+> code with comments...
+
 ```python
 def dict_depth(d, max_depth_so_far):
     # SCHRITT 1: Die Abbruchbedingung (Base Case)
