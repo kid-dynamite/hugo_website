@@ -108,3 +108,39 @@ ergebnis = dict_depth(d, 0)
 
 print(f"Die maximale Tiefe beträgt: {ergebnis}")  # Ausgabe: 3
 ```
+
+> Recursion on a tree
+
+```python
+def list_files(
+    parent_directory: dict[str, dict | None], current_filepath: str = ""
+) -> list[str]:
+    empty_list = []
+    for key,value in parent_directory.items():
+        new_path = current_filepath + "/" + key
+        if value == None:
+            empty_list.append(new_path)
+        else:
+            empty_list.extend(list_files(value, new_path))
+    return empty_list
+
+"""
+---------------------------------
+Input: {'Documents': {'Proposal.docx': None, 'Report': {'AnnualReport.pdf': None, 'Financials.xlsx': None}}, 'Downloads': {'picture1.jpg': None, 'picture2.jpg': None}}
+Expected:
+    /Documents/Proposal.docx
+    /Documents/Report/AnnualReport.pdf
+    /Documents/Report/Financials.xlsx
+    /Downloads/picture1.jpg
+    /Downloads/picture2.jpg
+Actual:
+    /Documents/Proposal.docx
+    /Documents/Report/AnnualReport.pdf
+    /Documents/Report/Financials.xlsx
+    /Downloads/picture1.jpg
+    /Downloads/picture2.jpg
+Pass
+============= PASS ==============
+1 passed, 0 failed, 3 skipped
+"""
+```
