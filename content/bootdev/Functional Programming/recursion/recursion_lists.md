@@ -9,6 +9,9 @@ summary = "🚀 list recursion"
 +++
 
 ```python
+
+# return the sum of a list
+
 def sum_nums(nums: list[int]) -> int:
     if len(nums) == 0:
         return 0
@@ -98,4 +101,23 @@ print("=== START DES PROGRAMMS ===")
 ergebnis = maxList([9, 31, 9, "string", [99, [201, [501]], 4, "er"]])
 print("===========================")
 print(f"Endergebnis: {ergebnis}")
+```
+
+```python
+
+# Calc the sum of all int i a list
+
+def sum_list_ints(lst):
+    add_int = 0
+    for item in lst:
+        if isinstance(item, list):
+            # Rekursiver Aufruf für verschachtelte Listen
+            add_int += sum_list_ints(item)
+        elif isinstance(item, int) and not isinstance(item, bool):
+            # Da bool ein Untertyp von int ist, schließt dies True/False aus
+            add_int += item
+
+    return add_int
+
+print(sum_list_ints([9, 31, 9, "string", [99, 4, "er"]]))  # Ausgabe: 152
 ```
