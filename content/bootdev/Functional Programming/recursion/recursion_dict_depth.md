@@ -144,3 +144,98 @@ Pass
 1 passed, 0 failed, 3 skipped
 """
 ```
+
+```python
+def dict_depth(d, max_depth_so_far):
+    """
+    SCHRITT-FÜR-SCHRITT-ERKLÄRUNG DER PRINT-AUSGABEN:
+
+    1. Start auf Ebene 0 (d):
+       - Die Funktion startet mit dem Haupt-Dictionary.
+       - max_depth_so_far ist 0. current_max wird 0.
+       - Die Schleife geht zum ersten Wert: dem Dictionary unter "melee_weapons".
+
+    2. Abstieg zu Ebene 1 ("melee_weapons"):
+       - Rekursiver Aufruf mit max_depth_so_far = 1. current_max wird 1.
+       - Die Schleife geht zum ersten Wert: dem Dictionary unter "stabbies".
+
+    3. Abstieg zu Ebene 2 ("stabbies"):
+       - Rekursiver Aufruf mit max_depth_so_far = 2. current_max wird 2.
+       - Die Schleife nimmt den ersten Wert: "spears": 4.
+
+    4. Abstieg zu Ebene 3 ("spears"):
+       - Rekursiver Aufruf für den Wert 4 mit max_depth_so_far = 3.
+       - Da 4 kein Dictionary ist (if not isinstance), wird sofort 3 zurückgegeben.
+
+    5. Zurück auf Ebene 2 (Verarbeitung von "spears"):
+       - depth_of_subdict erhält den Wert 3.
+       - AUSGABE 1: depth: 3
+       - Da 3 > 2 (current_max), wird current_max auf 3 gesetzt.
+       - AUSGABE 2: current_max: 3
+       - Die Schleife geht zum nächsten Wert: "knives": 3.
+
+    6. Abstieg zu Ebene 3 ("knives"):
+       - Rekursiver Aufruf für den Wert 3 mit max_depth_so_far = 3.
+       - Da 3 kein Dictionary ist, wird sofort 3 zurückgegeben.
+
+    7. Zurück auf Ebene 2 (Verarbeitung von "knives"):
+       - depth_of_subdict erhält den Wert 3.
+       - AUSGABE 3: depth: 3
+       - Da 3 nicht größer als das aktuelle current_max (3) ist, bleibt current_max unverändert.
+       - AUSGABE 4: current_max: 3
+       - Das "stabbies"-Dictionary ist fertig. Ebene 2 gibt ihr current_max (3) an Ebene 1 zurück.
+
+    8. Zurück auf Ebene 1 (Verarbeitung von "stabbies"):
+       - depth_of_subdict erhält den Rückgabewert 3.
+       - AUSGABE 5: depth: 3
+       - Da 3 > 1 (current_max), wird current_max auf 3 gesetzt.
+       - AUSGABE 6: current_max: 3
+       - Die Schleife auf Ebene 1 geht zum nächsten Wert: "bows": 6.
+
+    9. Abstieg zu Ebene 2 ("bows"):
+       - Rekursiver Aufruf für den Wert 6 mit max_depth_so_far = 2.
+       - Da 6 kein Dictionary ist, wird sofort 2 zurückgegeben.
+
+    10. Zurück auf Ebene 1 (Verarbeitung von "bows"):
+        - depth_of_subdict erhält den Wert 2.
+        - AUSGABE 7: depth: 2
+        - Da 2 nicht größer als current_max (3) ist, bleibt es bei 3.
+        - AUSGABE 8: current_max: 3
+        - Ebene 1 ist fertig und gibt ihr current_max (3) an Ebene 0 zurück.
+
+    11. Zurück auf Ebene 0 (Haupt-Ebene):
+        - depth_of_subdict erhält den Wert 3.
+        - AUSGABE 9: depth: 3
+        - Da 3 > 0 (current_max), wird current_max auf 3 gesetzt.
+        - AUSGABE 10: current_max: 3
+        - Die Funktion endet und liefert das Endergebnis.
+    """
+    if not isinstance(d, dict) or not d:
+        return max_depth_so_far
+
+    current_max = max_depth_so_far
+    for v in d.values():
+        depth_of_subdict = dict_depth(v, max_depth_so_far + 1)
+        print(f"depth: {depth_of_subdict}")
+        if depth_of_subdict > current_max:
+            current_max = depth_of_subdict
+        print(f"current_max: {current_max}")
+
+    return current_max
+
+
+# Test-Daten aus der boot.dev Aufgabe
+d = {
+    "melee_weapons": {
+        "stabbies": {
+            "spears": 4,
+            "knives": 3,
+        },
+        "bows": 6
+    }
+}
+
+ergebnis = dict_depth(d, 0)
+print(f"Die maximale Tiefe beträgt: {ergebnis}")
+
+```
