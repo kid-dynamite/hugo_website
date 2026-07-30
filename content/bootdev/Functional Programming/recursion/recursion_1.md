@@ -33,6 +33,13 @@ def sum_num(num):
     return num + sum_num(num - 2)
 
 print(sum_num(8))  # prints: 20
+"""
+num = 8: 8 + sum_calc(6)
+num 2 = 2 + 0 = 2
+num 4 = 4 + 2 = 6
+num 6 = 6 + 6 = 12
+num 8 = 8 + 12 = 20
+"""
 print(sum_num(7))  # prints: 16 (7 + 5 + 3 + 1)
 ```
 
