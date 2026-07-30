@@ -74,6 +74,9 @@ Jetzt, wo der Computer weiß, dass `fakultaet(1) = 1` ist, setzt er die Zahlen v
 Am Ende steht in der innersten Logik also die reine Multiplikationskette:
 `5 * 4 * 3 * 2 * 1 = 120`.
 
+> Countdown
+
+```python
 # Walk 100 steps back
 
 def walk(steps):
@@ -113,7 +116,7 @@ return
 else:
 countdown(n - 1)
 
-````
+```
 
 > Iterative versions
 
@@ -144,4 +147,4 @@ def factorial_iterative(num):
     return result
 
 print(factorial_iterative(5))  # prints: 120
-````
+```
