@@ -81,19 +81,34 @@ Jetzt, wo der Computer weiß, dass `fakultaet(1) = 1` ist, setzt er die Zahlen v
 Am Ende steht in der innersten Logik also die reine Multiplikationskette:
 `5 * 4 * 3 * 2 * 1 = 120`.
 
-> Countdown
+> Walk 100 steps back
 
 ```python
-# Walk 100 steps back
+def walk(steps):
+
+    if steps == 0:
+        return
+
+    print(f"You take step #{steps}")
+    walk(steps - 1)
+
+
+#walk(100) # prints: 100, 99, 98...
+
+# ********************************************
 
 def walk(steps):
-if steps == 0:
-return
-print(f"You take step #{steps}")
-walk(steps - 1)
 
-walk(100) # prints: 100, 99, 98...
+    if steps == 0:
+        return # or return 0
 
+    walk(steps - 1)
+    print(f"You take step #{steps}")
+
+walk(100) # prints: 1, 2, ..., 100
+```
+
+```python
 # Print a word
 
 def print_chars(word: str, i: int) -> None:
