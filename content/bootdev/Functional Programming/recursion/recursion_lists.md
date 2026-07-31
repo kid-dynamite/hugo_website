@@ -26,8 +26,8 @@ def maxList(lst):
 
     """
         Use Recursion to
-        Return the maximum value int the list
-        ***Assume the list is not empyt
+        Return the maximum value int in a list
+        ***Assume the list is not empty
         Ex: if lst = [9, 31,9], maxList(lst) returns 31
     """
 
@@ -45,8 +45,8 @@ def maxList(lst):
 
     """
         Use Recursion to
-        Return the maximum value int the list
-        ***Assume hte list is not empyt
+        Return the maximum value int in a list
+        ***Assume the list is not empty
         Ex: if lst = [9, 31,9, "string", [99, 4, "er"]], maxList(lst) returns 99
     """
 
@@ -57,7 +57,7 @@ def maxList(lst):
         for item in lst:
             if isinstance(item, list):
                 max_in_nested = maxList(item)
-                if max_in_nested > tempMax:
+                if max_in_nested is not None and max_in_nested > tempMax:
                     tempMax = max_in_nested
             elif isinstance(item, int):
                 if item > tempMax:
@@ -122,7 +122,8 @@ def maxList(lst):
                 max_in_nested = maxList(item)
 
                 print(f"    <-- Zurück aus der Unterliste. Gefundenes Max dort war: {max_in_nested}")
-                if max_in_nested > tempMax:
+                if max_in_nested is not None and max_in_nested > tempMax:
+
                     tempMax = max_in_nested
 
             elif isinstance(item, int):
