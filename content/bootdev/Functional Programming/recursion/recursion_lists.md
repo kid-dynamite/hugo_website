@@ -27,7 +27,7 @@ def maxList(lst):
     """
         Use Recursion to
         Return the maximum value int the list
-        ***Assume hte list is not empyt
+        ***Assume the list is not empyt
         Ex: if lst = [9, 31,9], maxList(lst) returns 31
     """
 
@@ -66,6 +66,43 @@ def maxList(lst):
 
 print(maxList([9, 31,9, "string", [99, 4, "er"]]))
 ```
+
+### Ein konkretes Beispiel im Zeitraffen
+
+Schauen wir uns an, was bei `maxList([9, [99, 4]])` passiert:
+
+#### 1. Die Hauptfunktion startet (Runde 1)
+
+- Sie sieht die `9`. Das ist ein `int`.
+- `tempMax` der Hauptfunktion wird `9`.
+- Jetzt kommt das nächste Element: `[99, 4]`. Das ist eine Liste!
+- Die Hauptfunktion pausiert in der Zeile: `max_in_nested = maxList([99, 4])`
+
+#### 2. Die Funktion startet neu für die innere Liste (Runde 2)
+
+- Diese Runde hat ihr **eigenes, neues** `tempMax` (wieder gestartet bei -∞).
+- Sie sieht `99` → ihr `tempMax` wird `99`.
+- Sie sieht `4` → `99` bleibt größer.
+- Die Liste ist zu Ende. Runde 2 erreicht die Zeile `return tempMax`.
+- Da `tempMax` hier `99` ist, sagt die Funktion: **`return 99`**. Runde 2 schließt sich.
+
+#### 3. Zurück in der Hauptfunktion (Runde 1)
+
+- Der Aufruf `maxList([99, 4])` wird nun durch das Ergebnis `99` ersetzt.
+- Die Zeile liest sich jetzt so:
+  ```python
+  max_in_nested = 99
+  ```
+- **Jetzt** hat `max_in_nested` den Wert `99` gespeichert!
+- Erst danach folgt der Vergleich in der Hauptfunktion:
+  ```python
+  if max_in_nested > tempMax:  # Ist 99 > 9? Ja!
+      tempMax = max_in_nested  # Haupt-tempMax wird 99
+  ```
+
+### Zusammenfassung
+
+`max_in_nested` selbst sucht nicht nach Zahlen. Es ist wie ein **Postbote**. Es wartet geduldig, bis der rekursive Aufruf (`maxList(item)`) fertig geschaut hat, nimmt das Endergebnis (den `return`-Wert) entgegen und hält es für den anschließenden Vergleich bereit.
 
 ```python
 def maxList(lst):
