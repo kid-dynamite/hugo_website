@@ -118,7 +118,7 @@ def list_files(
     empty_list = []
     for key,value in parent_directory.items():
         new_path = current_filepath + "/" + key
-        if value == None:
+        if value is None:
             empty_list.append(new_path)
         else:
             empty_list.extend(list_files(value, new_path))
@@ -414,4 +414,19 @@ def find_and_format_large_files(
             results.extend(sub_results)
 
     return results
+```
+
+> another one
+
+```python
+def find_key_recursive(data, target_key):
+if not isinstance(data, dict):
+return None
+if target_key in data:
+return data[target_key]
+for value in data.values():
+result = find_key_recursive(value, target_key)
+if result is not None:
+return result
+return None
 ```
