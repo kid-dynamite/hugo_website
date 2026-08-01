@@ -246,3 +246,98 @@ if result is not None:
 return result
 return None
 ```
+
+> Exercise & Solution
+
+```python
+def find_file_path(p: dict, target_name: str, current_path: str = "") -> str | None:
+    # AUFGABENSTELLUNG:
+    # Eine Datei nach Namen suchen und den vollständigen Pfad zurückgeben.
+
+    for key, value in p.items():
+        # 1. Wenn der Value KEIN dict ist (Datei) UND der Key gleich target_name ist:
+        #    Gib den zusammengesetzten Pfad zurück.
+        if not isinstance(value, dict) and key == target_name:
+            if current_path == "":
+                return key
+            else:
+                return f"{current_path}/{key}"
+
+        # 2. Wenn der Value ein dict ist (ein Unterordner):
+        #    Berechne den neuen Pfad und tauche per Rekursion unter.
+        elif isinstance(value, dict):
+            if current_path == "":
+                new_path = key
+            else:
+                new_path = f"{current_path}/{key}"
+
+            # Rekursiver Aufruf für den Unterordner
+            result = find_file_path(value, target_name, new_path)
+
+            # Wenn die Datei tiefer unten gefunden wurde, reichst du sie nach oben weiter
+            if result is not None:
+                return result
+
+    # Wenn die Datei im aktuellen Ordner/Unterordner nicht existiert
+    return None
+
+
+# --- TESTDATEN ZUM AUSPROBIEREN ---
+file_system = {
+    "Projects": {
+        "presentation.pptx": 12,
+        "SourceCode": {
+            "main.py": 2,
+            "database.db": 45,
+        },
+    },
+    "Music": {
+        "song1.mp3": 4,
+        "podcast.mp3": 60,
+    },
+}
+
+# --- TEST-AUFRUFE ---
+print("Suche nach database.db:")
+print(find_file_path(file_system, "database.db"))
+# Erwartet: Projects/SourceCode/database.db
+
+print("\nSuche nach song1.mp3:")
+print(find_file_path(file_system, "song1.mp3"))
+# Erwartet: Music/song1.mp3
+
+print("\nSuche nach missing.txt:")
+print(find_file_path(file_system, "missing.txt"))
+# Erwartet: None
+
+[ Start ganz oben ]
+  Rucksack (current_path) ist leer: ""
+  Du stehst im Hauptverzeichnis.
+
+  └── Gehe in den ersten Ordner: "Projects"
+      │
+      ├── SCHRITT 1: Du packst "Projects" in den Rucksack.
+      │   Neuer Rucksack-Inhalt: "Projects"
+      │
+      ├── Datei prüfen: "presentation.pptx"
+      │   Ist das "database.db"? Nein. Weitergehen...
+      │
+      └── Gehe tiefer in den Unterordner: "SourceCode"
+          │
+          ├── SCHRITT 2: Du hängst "SourceCode" an den Rucksack an.
+          │   Neuer Rucksack-Inhalt: "Projects/SourceCode"
+          │
+          ├── Datei prüfen: "main.py"
+          │   Ist das "database.db"? Nein. Weitergehen...
+          │
+          └── Datei prüfen: "database.db"
+              │
+              └── 🎯 GEFUNDEN!
+                  Du machst den Rucksack auf und schaust hinein.
+                  Du nimmst den Inhalt ("Projects/SourceCode") und
+                  hängst den Dateinamen an:
+                  => "Projects/SourceCode/database.db"
+
+                  Diesen fertigen Text rufst du laut nach oben (return)!
+
+```
