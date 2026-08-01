@@ -89,3 +89,28 @@ Der `return`-Befehl ganz unten im Code wird in diesem Beispiel **exakt zweimal**
 
 - **Das erste Mal** von der inneren Kopie: Schickt die `103` hoch zur Hauptschleife.
 - **Das zweite Mal** von der äußeren Kopie: Schickt die finale `152` hoch zum `print`-Befehl.
+
+> Flatten a list
+
+```python
+# Dein Test-Datensatz für die "Flatten"-Aufgabe
+fiese_liste = [
+    1, ,
+    [],                                  # Eine leere Liste (sollte verschwinden)
+    "string1",
+    [4, ["string2", 5, [6, 7]], 8],      # Tiefe Verschachtelung
+    [9]
+]
+
+# Das gewünschte Ergebnis nach deinem .extend()/.append() Umbau:
+# [1, 2, 3, "string1", 4, "string2", 5, 6, 7, 8, 9]
+
+
+# Hier kannst du später deine Funktion testen:
+def flatten_list(lst):
+    # Dein Code kommt hier hin...
+    pass
+
+# print(flatten_list(fiese_liste))
+
+```
