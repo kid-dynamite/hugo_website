@@ -57,53 +57,62 @@ ergebnis = dict_depth(d, 0)
 print(f"Die maximale Tiefe beträgt: {ergebnis}")
 ```
 
-> Test
-
-```python
-print("test,test")
-```
-
 > Explanation
 
 ```python
-# === START DER REKURSION ===
+# === START DER REKURSION (Präzise Python-Ausführung) ===
 #
-# → Starte dict_depth mit Wert: {'melee_weapons': {'stabbies': {'spears': 4, 'knives': 3}, 'bows': 6}} (max_depth_so_far=0)
-#   Startwert auf dieser Ebene: current_max = 0
+# → Starte Ebene 0 (melee_weapons) mit max_depth_so_far=0
+#   Setze Startwert für diese Ebene: current_max = 0
 #   • Prüfe Schlüssel 'melee_weapons'...
-#   → Starte dict_depth mit Wert: {'stabbies': {'spears': 4, 'knives': 3}, 'bows': 6} (max_depth_so_far=1)
-#     Startwert auf dieser Ebene: current_max = 1
-#     • Prüfe Schlüssel 'stabbies'...
-#     → Starte dict_depth mit Wert: {'spears': 4, 'knives': 3} (max_depth_so_far=2)
-#       Startwert auf dieser Ebene: current_max = 2
-#       • Prüfe Schlüssel 'spears'...
-#       → Starte dict_depth mit Wert: 4 (max_depth_so_far=3)
-#         [OBERES RETURN] Kein Dict! Gebe 3 zurück.
-#       • Zurück auf Ebene 2! depth_of_subdict wurde geladen mit: 3
-#         Vergleich: 3 > 2 ist WAHR!
-#         current_max wurde aktualisiert auf: 3
-#       • Prüfe Schlüssel 'knives'...
-#       → Starte dict_depth mit Wert: 3 (max_depth_so_far=3)
-#         [OBERES RETURN] Kein Dict! Gebe 3 zurück.
-#       • Zurück auf Ebene 2! depth_of_subdict wurde geladen mit: 3
-#         Vergleich: 3 > 3 ist FALSCH. current_max bleibt: 3
-#       [UNTERES RETURN] Schleife fertig! Gebe current_max=3 an die obere Ebene ab.
-#     • Zurück auf Ebene 1! depth_of_subdict wurde geladen mit: 3
-#       Vergleich: 3 > 1 ist WAHR!
-#       current_max wurde aktualisiert auf: 3
-#     • Prüfe Schlüssel 'bows'...
-#     → Starte dict_depth mit Wert: 6 (max_depth_so_far=2)
-#       [OBERES RETURN] Kein Dict! Gebe 2 zurück.
-#     • Zurück auf Ebene 1! depth_of_subdict wurde geladen mit: 2
-#       Vergleich: 2 > 3 ist FALSCH. current_max bleibt: 3
-#     [UNTERES RETURN] Schleife fertig! Gebe current_max=3 an die obere Ebene ab.
-#   • Zurück auf Ebene 0! depth_of_subdict wurde geladen mit: 3
-#     Vergleich: 3 > 0 ist WAHR!
-#     current_max wurde aktualisiert auf: 3
-#   [UNTERES RETURN] Schleife fertig! Gebe current_max=3 an die obere Ebene ab.
+#
+#     → Starte Ebene 1 (stabbies & bows) mit max_depth_so_far=1 (0 + 1)
+#       Setze Startwert für diese Ebene: current_max = 1
+#       • Prüfe Schlüssel 'stabbies'...
+#
+#         → Starte Ebene 2 (spears & knives) mit max_depth_so_far=2 (1 + 1)
+#           Setze Startwert für diese Ebene: current_max = 2
+#           • Prüfe Schlüssel 'spears'...
+#
+#             → Starte Aufruf für Wert: 4 mit max_depth_so_far=3 (2 + 1)
+#               [OBERES RETURN] Kein Dict! Gebe 3 direkt zurück.
+#
+#         • Zurück auf Ebene 2! depth_of_subdict geladen mit: 3
+#           Vergleich: Ist 3 > 2? WAHR!
+#           Aktualisiere: current_max der Ebene 2 wird: 3
+#
+#           • Prüfe Schlüssel 'knives'...
+#             → Starte Aufruf für Wert: 3 mit max_depth_so_far=3 (2 + 1)
+#               [OBERES RETURN] Kein Dict! Gebe 3 direkt zurück.
+#
+#         • Zurück auf Ebene 2! depth_of_subdict geladen mit: 3
+#           Vergleich: Ist 3 > 3? FALSCH. current_max bleibt: 3
+#
+#         [UNTERES RETURN] Schleife für 'stabbies' fertig!
+#         Gebe current_max=3 an die obere Ebene ab.
+#
+#     • Zurück auf Ebene 1! depth_of_subdict geladen mit: 3
+#       Vergleich: Ist 3 > 1? WAHR! (Hier stand vorher fälschlicherweise eine 2)
+#       Aktualisiere: current_max der Ebene 1 wird: 3
+#
+#       • Prüfe Schlüssel 'bows'...
+#         → Starte Aufruf für Wert: 6 mit max_depth_so_far=2 (1 + 1)
+#           [OBERES RETURN] Kein Dict! Gebe 2 direkt zurück.
+#
+#     • Zurück auf Ebene 1! depth_of_subdict geladen mit: 2
+#       Vergleich: Ist 2 > 3? FALSCH. current_max bleibt: 3
+#
+#     [UNTERES RETURN] Schleife für Ebene 1 fertig!
+#     Gebe current_max=3 an die obere Ebene ab.
+#
+# • Zurück auf Ebene 0! depth_of_subdict geladen mit: 3
+#   Vergleich: Ist 3 > 0? WAHR! (Das war der Fehler im alten Protokoll!)
+#   Aktualisiere: current_max der Ebene 0 wird: 3
+#
+# [UNTERES RETURN] Ganzes Skript fertig! Finale Rückgabe: 3
 #
 # === ENDE DER REKURSION ===
-# Die maximale Tiefe beträgt: 3
+
 ```
 
 > Dictionary depth - code with comments...
