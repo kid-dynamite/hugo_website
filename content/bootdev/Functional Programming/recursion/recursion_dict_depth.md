@@ -57,6 +57,8 @@ ergebnis = dict_depth(d, 0)
 print(f"Die maximale Tiefe beträgt: {ergebnis}")
 ```
 
+> Explanation
+
 ```python
 # === START DER REKURSION ===
 #
