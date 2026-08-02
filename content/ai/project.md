@@ -79,3 +79,261 @@ Dieses Projekt dient als "First Personal Project" für Boot.dev. Es ist speziell
 Dieses Framework spiegelt exakt die Architektur echter Industriestandards wie **LangChain** oder **LlamaIndex** wider. Anstatt fertige Tools nur zu konsumieren, beweist du mit diesem Projekt, dass du die zugrundeliegenden Software-Design-Patterns (wie Pipelines, Mocks und Tracing) von Grund auf selbst implementieren und strukturieren kannst.
 
 LLMOps Pipeline Projekt reaktivieren
+
+> Linux
+
+# 🛠️ Dokumentation: Einrichtung Ubuntu Server für LFCS
+
+Dieses Dokument beschreibt die Ersteinrichtung eines virtuellen Cloud-Servers (VPS) unter **Ubuntu 24.04 LTS** zur Vorbereitung auf die LFCS-Prüfung.
+
+## 📋 Voraussetzungen
+
+- Ein aktiver Account bei einem Cloud-Anbieter (z. B. Hetzner Cloud, IONOS)
+- Ein installierter SSH-Client auf dem lokalen Laptop (unter Windows: _PowerShell_ oder _Eingabeaufforderung_, unter macOS: _Terminal_)
+- Die öffentliche IP-Adresse des Servers (Beispiel im Dokument: `123.45.67.89`)
+
+---
+
+## 🚀 Schritt 1: Server-Erstellung im Cloud-Dashboard
+
+Beim Erstellen des Servers im Web-Interface des Anbieters müssen folgende Parameter gewählt werden:
+
+- **Standort:** Deutschland (Falkenstein, Frankfurt oder Nürnberg)
+- **Image (Betriebssystem):** `Ubuntu 24.04 LTS` (Long Term Support)
+- **Typ / Tarif:** Shared vCPU (kleinster Tarif mit 2 vCPUs und ca. 4 GB RAM ist ausreichend)
+- **Authentifizierung:** Passwort (wird per E-Mail zugestellt)
+
+---
+
+## 🔐 Schritt 2: Erstmalige Verbindung über SSH
+
+Die Verwaltung des Servers erfolgt ausschließlich remote über die Kommandozeile (CLI).
+
+1. Öffne das Terminal auf deinem lokalen Laptop.
+2. Baue die Verbindung zum Server als Benutzer `root` auf:
+   ```bash
+   ssh root@123.45.67.89
+   ```
+3. Bestätige die Sicherheitsabfrage (_"Are you sure you want to continue connecting?"_) mit der Eingabe von `yes`.
+4. Gib das temporäre Passwort aus der E-Mail des Cloud-Anbieters ein.
+   _(Hinweis: Unter Linux werden bei der Passworteingabe keine Zeichen oder Sternchen angezeigt. Einfach blind eintippen und mit `Enter` bestätigen)._
+5. Folge der Aufforderung auf dem Bildschirm, um das temporäre Passwort durch ein neues, sicheres Passwort zu ersetzen.
+
+---
+
+## 🔄 Schritt 3: Systemaktualisierung (Enterprise-Standard)
+
+Nach dem ersten Login muss das System sofort auf den neuesten Sicherheitsstand gebracht werden. Führe dazu folgende Befehle nacheinander aus:
+
+### 1. Paketquellen aktualisieren
+
+Der Server prüft im Internet, ob neuere Softwareversionen verfügbar sind:
+
+```bash
+apt update
+```
+
+### 2. Sicherheitsupdates installieren
+
+Alle verfügbaren Updates werden heruntergeladen und ohne weitere Nachfrage (`-y`) installiert:
+
+```bash
+apt upgrade -y
+```
+
+### 3. System neu starten
+
+Um sicherzustellen, dass alle Updates (insbesondere Kernel-Updates) aktiv werden, startet der Server neu. Die aktuelle SSH-Sitzung wird dabei automatisch beendet:
+
+```bash
+reboot
+```
+
+Nach etwa **30 bis 60 Sekunden** ist der Server wieder hochgefahren und du kannst dich mit dem Befehl aus Schritt 2 und deinem neuen Passwort erneut einwählen.
+
+> SSH
+
+# 🔑 Dokumentation: SSH-Key-Authentifizierung & Server-Härtung
+
+Dieses Dokument beschreibt, wie die unsichere Passwort-Anmeldung über SSH komplett abgeschaltet und durch kryptografische Schlüsselpaare (Public/Private Key) ersetzt wird.
+
+---
+
+## 💻 Schritt 1: SSH-Schlüssel auf dem LOKALEN Laptop erstellen
+
+_Führe diesen Schritt im Terminal deines eigenen Laptops aus (NICHT auf dem Server!):_
+
+```bash
+ssh-keygen -t ed25519 -C "lfcs-lernserver"
+```
+
+_(Drücke bei allen Abfragen einfach `Enter`, um den Standardpfad zu wählen und kein extra Passwort für den Schlüssel zu vergeben)._
+
+---
+
+## 🚀 Schritt 2: Schlüssel auf den Server übertragen
+
+_Führe auch diesen Schritt auf deinem LOKALEN Laptop aus. Ersetze `deinname` und die IP:_
+
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519.pub deinname@123.45.67.89
+```
+
+_Was passiert?_ Du wirst ein letztes Mal nach deinem Server-Passwort gefragt. Der öffentliche Schlüssel wird nun sicher auf dem Server hinterlegt.
+
+**Test:** Logge dich jetzt mit `ssh deinname@123.45.67.89` ein. Du solltest ohne Passwort-Abfrage direkt auf dem Server landen!
+
+---
+
+## 🔒 Schritt 3: Passwort-Login auf dem Server VERBIETEN
+
+_Führe diese Schritte JETZT AUF DEM SERVER als dein Benutzer aus:_
+
+1. Öffne die SSH-Konfigurationsdatei mit dem Texteditor:
+
+   ```bash
+   sudo nano /etc/ssh/sshd_config
+   ```
+
+2. Suche mit `Strg + W` nach dem Begriff `PasswordAuthentication`.
+3. Ändere die Zeile so ab (entferne das `#`-Zeichen, falls vorhanden):
+
+   ```text
+   PasswordAuthentication no
+   ```
+
+4. Suche nach `PermitRootLogin` und ändere es ab auf:
+
+   ```text
+   PermitRootLogin no
+   ```
+
+   _(Das verbietet dem gefährlichen `root`-User den direkten Login von außen)._
+
+5. Speichere mit `Strg + O`, bestätige mit `Enter` und schließe den Editor mit `Strg + X`.
+
+---
+
+## 🔄 Schritt 4: SSH-Dienst neu starten
+
+Damit die Änderungen aktiv werden, starte den SSH-Dienst neu:
+
+```bash
+sudo systemctl restart ssh
+```
+
+❗ **WICHTIG:** Schließe dein aktuelles Terminal-Fenster noch nicht! Öffne ein **neues, zweites Terminal-Fenster** auf deinem Laptop und versuche dich einzuloggen. Wenn das ohne Passwort klappt, war alles erfolgreich und dein Server ist ab jetzt immun gegen automatisierte Passwort-Hacker (Brute-Force-Angriffe).
+
+> Udemy
+
+# 🔑 Dokumentation: SSH-Key-Authentifizierung & Server-Härtung
+
+Dieses Dokument beschreibt, wie die unsichere Passwort-Anmeldung über SSH komplett abgeschaltet und durch kryptografische Schlüsselpaare (Public/Private Key) ersetzt wird.
+
+---
+
+## 💻 Schritt 1: SSH-Schlüssel auf dem LOKALEN Laptop erstellen
+
+_Führe diesen Schritt im Terminal deines eigenen Laptops aus (NICHT auf dem Server!):_
+
+```bash
+ssh-keygen -t ed25519 -C "lfcs-lernserver"
+```
+
+_(Drücke bei allen Abfragen einfach `Enter`, um den Standardpfad zu wählen und kein extra Passwort für den Schlüssel zu vergeben)._
+
+---
+
+## 🚀 Schritt 2: Schlüssel auf den Server übertragen
+
+_Führe auch diesen Schritt auf deinem LOKALEN Laptop aus. Ersetze `deinname` und die IP:_
+
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519.pub deinname@123.45.67.89
+```
+
+_Was passiert?_ Du wirst ein letztes Mal nach deinem Server-Passwort gefragt. Der öffentliche Schlüssel wird nun sicher auf dem Server hinterlegt.
+
+**Test:** Logge dich jetzt mit `ssh deinname@123.45.67.89` ein. Du solltest ohne Passwort-Abfrage direkt auf dem Server landen!
+
+---
+
+## 🔒 Schritt 3: Passwort-Login auf dem Server VERBIETEN
+
+_Führe diese Schritte JETZT AUF DEM SERVER als dein Benutzer aus:_
+
+1. Öffne die SSH-Konfigurationsdatei mit dem Texteditor:
+
+   ```bash
+   sudo nano /etc/ssh/sshd_config
+   ```
+
+2. Suche mit `Strg + W` nach dem Begriff `PasswordAuthentication`.
+3. Ändere die Zeile so ab (entferne das `#`-Zeichen, falls vorhanden):
+
+   ```text
+   PasswordAuthentication no
+   ```
+
+4. Suche nach `PermitRootLogin` und ändere es ab auf:
+
+   ```text
+   PermitRootLogin no
+   ```
+
+   _(Das verbietet dem gefährlichen `root`-User den direkten Login von außen)._
+
+5. Speichere mit `Strg + O`, bestätige mit `Enter` und schließe den Editor mit `Strg + X`.
+
+---
+
+## 🔄 Schritt 4: SSH-Dienst neu starten
+
+Damit die Änderungen aktiv werden, starte den SSH-Dienst neu:
+
+```bash
+sudo systemctl restart ssh
+```
+
+❗ **WICHTIG:** Schließe dein aktuelles Terminal-Fenster noch nicht! Öffne ein **neues, zweites Terminal-Fenster** auf deinem Laptop und versuche dich einzuloggen. Wenn das ohne Passwort klappt, war alles erfolgreich und dein Server ist ab jetzt immun gegen automatisierte Passwort-Hacker (Brute-Force-Angriffe).
+
+> Youtube
+
+# Empfohlene YouTube-Ressourcen für FastAPI & Docker
+
+## 1. Direktlinks zu Einstiegsvideos
+
+- **[A Gentle Introduction to Docker With FastAPI](https://youtube.com)** – Perfekt für den Übergang von lokalem Code zum Container.
+- **[FastAPI Docker Tutorial: From Zero to Production](https://youtube.com)** – Erklärt Docker im Team und Docker Compose für Live-Code-Änderungen.
+
+---
+
+## 2. Top YouTube-Kanäle für deinen Stack
+
+### ArjanCodes (Architektur & Clean Code)
+
+- **Fokus:** Software-Design-Patterns in Python.
+- **Nutzen für dich:** Zeigt dir, wie du deine OOP-Kenntnisse nutzt, um FastAPI-Projekte sauber zu strukturieren.
+- **Such-Tipp:** `ArjanCodes FastAPI`
+
+### Tech World with Nana (DevOps & Docker verständlich gemacht)
+
+- **Fokus:** Visuelle und animierte Erklärungen zu Infrastruktur.
+- **Nutzen für dich:** Veranschaulicht perfekt, wie Docker, Docker Compose und Netzwerke im Hintergrund funktionieren.
+- **Such-Tipp:** `Docker Tutorial for Beginners Tech World with Nana`
+
+### Sanjeev Thiyagarajan (Echte Deep Dives)
+
+- **Fokus:** Monumentale, kostenlose Komplettkurse (oft 10+ Stunden).
+- **Nutzen für dich:** Baut echte APIs inklusive PostgreSQL-Datenbanken, JWT-Authentifizierung und Docker-Setups von Grund auf.
+- **Such-Tipp:** `FastAPI Full Course Sanjeev Thiyagarajan`
+
+---
+
+## 3. Effektive Suchbegriffe für die YouTube-Suche
+
+Da die hochwertigsten Inhalte auf Englisch sind, fährst du mit diesen Begriffen am besten:
+
+- `FastAPI Docker Compose PostgreSQL tutorial` (Verbindung von App + Datenbank)
+- `Python Microservices with FastAPI and Docker` (Kommunikation mehrerer Container)
+- `FastAPI Production Setup` (Best Practices für echte Server)
