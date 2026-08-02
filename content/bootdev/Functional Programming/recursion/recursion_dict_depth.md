@@ -57,6 +57,7 @@ ergebnis = dict_depth(d, 0)
 print(f"Die maximale Tiefe beträgt: {ergebnis}")
 ```
 
+```text
 === START DER REKURSION ===
 
 → Starte dict_depth mit Wert: {'melee_weapons': {'stabbies': {'spears': 4, 'knives': 3}, 'bows': 6}} (max_depth_so_far=0)
@@ -95,6 +96,7 @@ current_max wurde aktualisiert auf: 3
 
 === ENDE DER REKURSION ===
 Die maximale Tiefe beträgt: 3
+```
 
 > Dictionary depth - code with comments...
 
