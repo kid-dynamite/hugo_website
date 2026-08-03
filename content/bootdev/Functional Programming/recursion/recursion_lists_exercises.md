@@ -114,3 +114,50 @@ def flatten_list(lst):
 # print(flatten_list(fiese_liste))
 
 ```
+
+> Solution
+
+```python
+def flatten_list(nested_list):
+    # Basisfall 1: Die Liste ist leer
+    if not nested_list:
+        return []
+
+    head = nested_list[0]
+    tail = nested_list[1:]
+
+    # Basisfall 2: Das erste Element ist eine Liste -> beide Teile rekursiv flachklopfen
+    if isinstance(head, list):
+        return flatten_list(head) + flatten_list(tail)
+
+    # Rekursiver Schritt: Erstes Element ist eine Zahl -> mit dem flachen Rest verbinden
+    return [head] + flatten_list(tail)
+
+# Testläufe
+print(flatten_list([1, [2, 3], 4]))       # Ausgabe: [1, 2, 3, 4]
+print(flatten_list([1, [2, [3, 4]], 5])) # Ausgabe: [1, 2, 3, 4, 5]
+```
+
+> another Solution
+
+```python
+def flatten_list(lst):
+    # 1. Dein korrekter Basisfall
+    if len(lst) == 0:
+        return []
+
+    # Wir nehmen uns NUR das erste Element und den Rest
+    head = lst[0]
+    tail = lst[1:]
+
+    # 2. Wenn das erste Element eine Zahl ist (wie dein isinstance)
+    if isinstance(head, int):
+        # Wir packen die Zahl in eine Liste und hängen den
+        # rekursiv gelösten Rest hinten dran.
+        return [head] + flatten_list(tail)
+
+    # 3. Wenn das erste Element eine Liste ist
+    if isinstance(head, list):
+        # Wir klopfen die innere Liste flach UND den Rest der Liste
+        return flatten_list(head) + flatten_list(tail)
+```
