@@ -21,6 +21,31 @@ def sum_nums(nums: list[int]) -> int:
 print(sum_nums([1, 2, 3, 4, 5]))        # prints: 15
 ```
 
+> Find max in a list
+
+```python
+def max_nums(nums: list[int]) -> int:
+    # Basis-Fall: Wenn nur noch ein Element da ist, ist es das Maximum
+    if len(nums) == 1:
+        return nums[0]
+    if len(nums) == 0:
+        return 0
+
+    # Rekursiver Aufruf: Finde das Maximum im Rest der Liste (tail)
+    max_of_rest = max_nums(nums[1:])
+
+    # Vergleiche das erste Element mit dem Maximum des Rests
+    print(nums)
+    if nums[0] > max_of_rest:
+        return nums[0]
+    else:
+        return max_of_rest
+
+print(max_nums([1, 2, 3, 4, 5]))  # Ausgabe: 5
+```
+
+> Find max in a list
+
 ```python
 def maxList(lst):
 

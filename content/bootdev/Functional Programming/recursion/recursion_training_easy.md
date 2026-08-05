@@ -11,11 +11,11 @@ summary = "🚀 simple recursion exercises"
 ```python
 
 def is_palindrome(text):
-if len(text) <= 1:
-return True
-if text[0] != text[-1]:
-return False
-return is_palindrome(text[1:-1])
+    if len(text) <= 1:
+        return True
+    if text[0] != text[-1]:
+        return False
+    return is_palindrome(text[1:-1])
 
 is_palindrome("racecar")
 # True
@@ -41,4 +41,24 @@ collapse_repeats("boookkeeper")
 
 collapse_repeats("abca")
 # "abca"
+```
+
+```python
+def count_occurrences(values, target):
+    # SCHRITT 1: Die Notbremse (Wenn die Liste leer ist, haben wir 0 Treffer)
+    if len(values) == 0:
+        return 0
+
+    # SCHRITT 2: Der Rekursions-Aufruf (Wir holen uns das Ergebnis vom Rest der Liste)
+    anzahl_im_rest = count_occurrences(values[1:], target)
+
+    # SCHRITT 3: Die Prüfung (Wir schauen uns NUR das allererste Element an)
+    if values[0] == target:
+        return anzahl_im_rest + 1  # Wenn es passt: Rest + 1
+    else:
+        return anzahl_im_rest      # Wenn nicht: Nur der Rest
+
+
+
+print(count_occurrences(["potion", "key", "potion"], "potion"))
 ```

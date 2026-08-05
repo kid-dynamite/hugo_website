@@ -129,15 +129,6 @@ print_chars("Hello", 0)
 
 # o
 
-# Countdown
-
-def countdown(n: int) -> None:
-print(n)
-if n == 0:
-return
-else:
-countdown(n - 1)
-
 ```
 
 > Iterative versions
@@ -169,4 +160,81 @@ def factorial_iterative(num):
     return result
 
 print(factorial_iterative(5))  # prints: 120
+```
+
+```python
+
+def countdown(num):
+    if num == 0:
+        return 1
+
+    print(f"bevor (Hinweg): {num}")
+
+    a = countdown(num-1)
+
+    # JETZT DRUCKEN WIR A:
+    print(f"   <- Rückweg bei num={num}: Das 'a' hat gerade den Wert {a} erhalten!")
+
+    neuer_wert = a + 5
+    return neuer_wert
+
+# Wir fangen das Endergebnis in einer Variable auf und drucken es
+endergebnis = countdown(10)
+print(f"\nDas finale Endergebnis ist: {endergebnis}")
+
+"""
+bevor (Hinweg): 10
+bevor (Hinweg): 9
+bevor (Hinweg): 8
+bevor (Hinweg): 7
+bevor (Hinweg): 6
+bevor (Hinweg): 5
+bevor (Hinweg): 4
+bevor (Hinweg): 3
+bevor (Hinweg): 2
+bevor (Hinweg): 1
+   <- Rückweg bei num=1: Das 'a' hat gerade den Wert 1 erhalten!
+   <- Rückweg bei num=2: Das 'a' hat gerade den Wert 6 erhalten!
+   <- Rückweg bei num=3: Das 'a' hat gerade den Wert 11 erhalten!
+   <- Rückweg bei num=4: Das 'a' hat gerade den Wert 16 erhalten!
+   <- Rückweg bei num=5: Das 'a' hat gerade den Wert 21 erhalten!
+   <- Rückweg bei num=6: Das 'a' hat gerade den Wert 26 erhalten!
+   <- Rückweg bei num=7: Das 'a' hat gerade den Wert 31 erhalten!
+   <- Rückweg bei num=8: Das 'a' hat gerade den Wert 36 erhalten!
+   <- Rückweg bei num=9: Das 'a' hat gerade den Wert 41 erhalten!
+   <- Rückweg bei num=10: Das 'a' hat gerade den Wert 46 erhalten!
+
+Das finale Endergebnis ist: 51
+"""
+```
+
+```python
+
+
+def text_umdrehen(text): # BASE CASE: Wenn der Text leer ist, geben wir einen leeren Text zurück. # Das ist unser Startwert für die Rückkette!
+if len(text) == 0:
+return ""
+
+    erster_buchstabe = text[0]
+    restlicher_text = text[1:]
+
+    print(f"Hinweg: Packe '{erster_buchstabe}' beiseite. Rest ist: '{restlicher_text}'")
+
+    # HIER WARTEN WIR: a holt das Ergebnis aus der tieferen Ebene
+    a = text_umdrehen(restlicher_text)
+
+    # RÜCKWEG: Wir kleben den beiseitegepackten Buchstaben HINTEN an 'a' dran
+    neuer_text = a + erster_buchstabe
+
+    print(f"   <- Rückweg: 'a' ist '{a}'. Wir hängen '{erster_buchstabe}' hinten an -> '{neuer_text}'")
+
+    return neuer_text
+
+ergebnis = text_umdrehen("Code")
+print(f"\nFinale: {ergebnis}")
+
+```
+
+```
+
 ```
