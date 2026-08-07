@@ -1,11 +1,11 @@
 +++
 date = '2026-08-03T21:04:13+02:00'
 draft = false
-title = 'Recursion_dict_training_easy'
+title = 'Recursion_boot.dev_training_easy'
 showAuthor = false
 weight =57
 layout = "simple"
-summary = "🚀 simple recursion exercises"
+summary = "🚀 simple recursion exercises from boot.dev"
 +++
 
 ```python
@@ -61,4 +61,40 @@ def count_occurrences(values, target):
 
 
 print(count_occurrences(["potion", "key", "potion"], "potion"))
+```
+
+> It should recursively search values from left to right and return the index of the first item equal to target. Return -1 when the target is absent.
+
+```python
+def find_first_index(values, target, current_index=0):
+    if current_index >= len(values):
+        return -1
+    if values[current_index] == target:
+        return current_index
+    return find_first_index(values, target, current_index + 1)
+
+
+find_first_index(["idle", "alert", "alert"], "alert")
+# 1
+
+find_first_index([4, 8, 12], 7)
+# -1
+```
+
+> It should recursively return the largest number in a non-empty list
+
+```python
+def largest_number(numbers):
+    if len(numbers) == 1:
+        return numbers[0]
+
+    large_num = 0
+    head = numbers[0]
+    tail = largest_number(numbers[1:])
+
+    if head > tail:
+        return head
+    else:
+        return tail
+
 ```
