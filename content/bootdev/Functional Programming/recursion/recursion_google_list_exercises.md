@@ -8,6 +8,28 @@ layout = "simple"
 summary = "🚀 simple google  exercises on list recursion"
 +++
 
+> Vokale zaehlen
+
+```python
+def zaehle_vokale(text):
+    # Dein Code hier
+    if not text:
+        return 0
+
+    head = text[0]
+    tail = zaehle_vokale(text[1:])
+    vokale = ["a","e","i","o","u"]
+
+    if head in vokale:
+        return 1 + tail
+    else:
+        return tail
+
+# Hier rufst du die Funktion mit dem Text "python" auf:
+print(zaehle_vokale("python"))
+
+```
+
 > Verdoppele alle Zahlen einer Liste
 
 ```python

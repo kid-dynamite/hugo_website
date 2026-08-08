@@ -43,6 +43,29 @@ collapse_repeats("abca")
 # "abca"
 ```
 
+### 3. Das Zusammenfügen (Der Rückweg)
+
+Jetzt prüft die Funktion bei jedem Schritt: Ist der aktuelle erste Buchstabe (`text[0]`) derselbe wie der erste Buchstabe des bereits bereinigten Rests (`remaining[0]`)? Wenn ja, wird der aktuelle Buchstabe ignoriert. Wenn nein, wird er vorne angehängt.
+
+- **Schritt für `"er"`:** `text[0]` ist `"e"`, `remaining` ist `"r"`.
+  - `"e" != "r"` → Rückgabe: `"e" + "r"` = **`"er"`**
+- **Schritt für `"per"`:** `text[0]` ist `"p"`, `remaining` ist `"er"`.
+  - `"p" != "e"` → Rückgabe: `"p" + "er"` = **`"per"`**
+- **Schritt für `"eper"`:** `text[0]` ist `"e"`, `remaining` ist `"per"`.
+  - `"e" != "p"` → Rückgabe: `"e" + "per"` = **`"eper"`**
+- **Schritt für `"eeper"` (Erstes Duplikat):** `text[0]` ist `"e"`, `remaining` ist `"eper"`.
+  - `"e" == "e"` (Buchstaben gleich!) → Das aktuelle `"e"` wird ignoriert. Rückgabe nur `remaining`: **`"eper"`**
+- **Schritt für `"keeper"`:** `text[0]` ist `"k"`, `remaining` ist `"eper"`.
+  - `"k" != "e"` → Rückgabe: `"k" + "eper"` = **`"keeper"`**
+- **Schritt für `"kkeeper"` (Zweites Duplikat):** `text[0]` ist `"k"`, `remaining` ist `"keeper"`.
+  - `"k" == "k"` (Buchstaben gleich!) → Das aktuelle `"k"` wird ignoriert. Rückgabe: **`"keeper"`**
+- **Schritt für `"okkeeper"`:** `text[0]` ist `"o"`, `remaining` ist `"keeper"`.
+  - `"o" != "k"` → Rückgabe: `"o" + "keeper"` = **`"okeeper"`**
+- **Schritt für `"ookkeeper"` (Drittes Duplikat):** `text[0]` ist `"o"`, `remaining` ist `"okeeper"`.
+  - `"o" == "o"` (Buchstaben gleich!) → Das aktuelle `"o"` wird ignoriert. Rückgabe: **`"okeeper"`**
+- **Schritt für `"bookkeeper"`:** `text[0]` ist `"b"`, `remaining` ist `"okeeper"`.
+  - `"b" != "o"` → Rückgabe: `"b" + "okeeper"` = **`"bokeper"`**
+
 ```python
 def count_occurrences(values, target):
     # SCHRITT 1: Die Notbremse (Wenn die Liste leer ist, haben wir 0 Treffer)

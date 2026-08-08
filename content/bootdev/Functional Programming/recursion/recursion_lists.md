@@ -65,6 +65,8 @@ def maxList(lst):
 print(maxList([9, 31,9,7]))
 ```
 
+> Find Max in nested list
+
 ```python
 def maxList(lst):
 
@@ -164,6 +166,109 @@ print("=== START DES PROGRAMMS ===")
 ergebnis = maxList([9, 31, 9, "string", [99, [201, [501]], 4, "er"]])
 print("===========================")
 print(f"Endergebnis: {ergebnis}")
+```
+
+> Find Max in a nested list --> real recursion
+
+```python
+def maxList(lst):
+
+    """
+        Use Recursion to
+        Return the maximum value int in a list
+        ***Assume the list is not empty
+        Ex: if lst = [9, 31,9, "string", [99, 4, "er"]], maxList(lst) returns 99
+    """
+
+    if not lst:
+        return 0
+
+    head = lst[0]
+    tail = maxList(lst[1:])
+
+    num = 0
+
+    if isinstance(head, int):
+        if head > tail:
+            return head
+        else:
+            return tail
+    if isinstance(head, list):
+        return maxList(head)
+    else:
+        return tail
+    return tail
+
+print(maxList([9, 31,9, "string", [99, 4, "er"]]))
+
+```
+
+> Count strings in a nested list
+
+```python
+def count_strings(lst):
+    # Passe den Basis-Fall an: Was wird bei einer leeren Liste zurückgegeben?
+    if not lst:
+        return 0
+
+    head = lst[0]
+    tail = count_strings(lst[1:])
+
+    if isinstance(head, str):
+        return 1 + tail
+
+    if isinstance(head, list):
+        return count_strings(head) + tail
+
+
+    return tail
+
+    # Ergänze hier deine rekursive Logik und die Typ-Prüfungen
+
+
+
+
+# Test-Aufruf (Das erwartete Ergebnis für diese Liste ist 4)
+values = [1, "Apfel", [2, "Banane"], "Orange", [3, [4, "Erdbeere"]]]
+result = count_strings(values)
+
+print(result)
+# Erwartete Ausgabe: 4
+```
+
+> Some math in nested lists --> modulo
+
+```python
+def sum_even_numbers(lst):
+    # Basis-Fall: Was gibt eine leere Liste beim Zusammenrechnen als Basis zurück?
+    if not lst:
+        return 0
+
+    head = lst[0]
+    tail = sum_even_numbers(lst[1:])
+
+
+    # Ergänze hier deine rekursive Logik und die Prüfungen
+    if isinstance(head, int):
+        if head % 2 == 0:
+            return head + tail
+    if isinstance(head, list):
+        return sum_even_numbers(head) + tail
+
+
+    return tail
+
+
+
+
+
+# Test-Aufruf (Erwartetes Ergebnis: 2 + 4 + 6 = 12)
+# Die 3, 5 und "Hallo" müssen ignoriert werden!
+values = [2, 3, [4, "Hallo"], 5, [6]]
+result = sum_even_numbers(values)
+
+print(result)
+# Erwartete Ausgabe: 12
 ```
 
 ```python
