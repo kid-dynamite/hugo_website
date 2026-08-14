@@ -271,9 +271,10 @@ print(result)
 # Erwartete Ausgabe: 12
 ```
 
+> Calc the sum of all int i a list
+
 ```python
 
-# Calc the sum of all int i a list
 
 def sum_list_ints(lst):
     add_int = 0
@@ -288,4 +289,178 @@ def sum_list_ints(lst):
     return add_int
 
 print(sum_list_ints([9, 31, 9, "string", [99, 4, "er"]]))  # Ausgabe: 152
+```
+
+> Return depth of a list with for-loop and recursion
+
+```python
+def maxDepth(lst):
+    if not isinstance(lst, list):
+        return 0
+
+    current_max = 1  # Die aktuelle Liste selbst zählt als Ebene 1
+
+    for item in lst:
+        if isinstance(item, list):
+            # Hier wird das +1 direkt für die nächste Ebene addiert
+            sub_depth = 1 + maxDepth(item)
+            if sub_depth > current_max:
+                current_max = sub_depth
+
+    return current_max
+
+```
+
+> another way
+
+```python
+def maxDepth(lst):
+    """
+    Nutzt Rekursion, um die maximale Tiefe einer Liste zu berechnen.
+    Eine flache Liste wie [1, 2, 3] hat die Tiefe 1.
+    """
+    if not isinstance(lst, list):
+        return 0
+
+    max_sub_depth = 0
+    for item in lst:
+        if isinstance(item, list):
+            sub_depth = maxDepth(item)
+            if sub_depth > max_sub_depth:
+                max_sub_depth = sub_depth
+
+    return 1 + max_sub_depth
+
+# Test mit Ihrem Beispiel
+print(maxDepth([9, 31, 9, "string", [99, 4, "er"]])) # Gibt 2 aus
+print(maxDepth([1, [2, [3, [4]]]]))                  # Gibt 4 aus
+
+```
+
+> return a new list without None
+
+```python
+def remove_none_values(data):
+    if not data:
+        return []
+
+    head = data[0]
+    tail = remove_none_values(data[1:])
+
+    if isinstance(head, list):
+        # Wichtig: head rekursiv reinigen UND in eine Liste packen [[...]],
+        # damit die Struktur erhalten bleibt, wenn wir es mit tail verbinden!
+        return [remove_none_values(head)] + tail
+    elif head is None:
+        # Wenn es None ist, werfen wir es weg und geben nur den Rest zurück
+        return tail
+    else:
+        # Für alle anderen gültigen Werte (wie int, str etc.):
+        # Wir packen head in eine Liste [head] und hängen tail hinten dran
+        return [head] + tail
+
+# TESTFÄLLE
+list_1 = [1, None, 3]
+print(remove_none_values(list_1))
+# Ausgabe: [1, 3]
+
+list_2 = [1, [2, None, 3], None, [None, [4, 5]]]
+print(remove_none_values(list_2))
+# Ausgabe: [1, [2, 3], [[4, 5]]]
+```
+
+> with for-loop and recursion
+
+```python
+def remove_none_values(data):
+    # Basis-Fall: Falls die Liste komplett leer ist
+    if not data:
+        return []
+
+    result = []
+
+    # Die Schleife läuft flach durch die aktuelle Ebene
+    for item in data:
+        if isinstance(item, list):
+            # REKURSION: Wenn es eine Liste ist, tauchen wir ab,
+            # reinigen sie und hängen die gereinigte Liste an result an.
+            cleaned_nested = remove_none_values(item)
+            result.append(cleaned_nested)
+        elif item is not None:
+            # Normale Werte (int, str etc.) werden einfach behalten
+            result.append(item)
+        # Wenn item None ist, springt die Schleife weiter (wird ignoriert)
+
+    return result
+
+# TESTFÄLLE
+list_1 = [1, None, 3]
+print(remove_none_values(list_1))
+# Ausgabe: [1, 3]
+
+list_2 = [1, [2, None, 3], None, [None, [4, 5]]]
+print(remove_none_values(list_2))
+# Ausgabe: [1, [2, 3], [[4, 5]]]
+```
+
+> Create a new list with all the strings
+
+```python
+def extract_all_text(dom_tree):
+    result = []
+
+    for item in dom_tree:
+        if isinstance(item, str):
+            result.append(item)
+        if isinstance(item, list):
+            scan_list = extract_all_text(item)
+            result.extend(scan_list)
+
+
+    return result
+
+# TESTFÄLLE
+
+# Ein einfaches Dokument: Eine Überschrift und ein Absatz
+site_1 = ["Willkommen", "Auf meiner Website", ["Hier ist Text"]]
+print(extract_all_text(site_1))
+# Erwartete Ausgabe: ['Willkommen', 'Auf meiner Website', 'Hier ist Text']
+
+# Ein komplexes Dokument mit Zahlen (IDs) und tiefen Verschachtelungen
+site_2 = ["Startseite", 1024, ["Menü", ["Home", "Über uns"]], "Footer-Text", 404]
+print(extract_all_text(site_2))
+# Erwartete Ausgabe: ['Startseite', 'Menü', 'Home', 'Über uns', 'Footer-Text']
+
+```
+
+> Calculate the sum of all ints in a nested list
+
+```python
+def calculate_disk_space(folder):
+    total_size = 0
+
+    for item in folder:
+        if isinstance(item, int):
+            total_size += item
+        if isinstance(item, list):
+            sum_list = calculate_disk_space(item)
+            total_size += sum_list
+
+
+
+
+
+    return total_size
+
+# TESTFÄLLE
+
+# Ein einfacher Ordner mit 3 Dateien
+folder_1 = [12, 45, 5]
+print(calculate_disk_space(folder_1))
+# Erwartete Ausgabe: 62
+
+# Ein verschachtelter Ordner (Hauptordner hat Dateien und zwei Unterordner)
+folder_2 = [10, [20, 30], 5, [1, [2, 3]]]
+print(calculate_disk_space(folder_2))
+# Erwartete Ausgabe: 71
 ```

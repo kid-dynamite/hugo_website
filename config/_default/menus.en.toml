@@ -18,10 +18,24 @@
   weight = 1
 
 [[main]]
+  name = "Python Certification"
+  identifier = "python_certification"
+  url = "/python_certification/"             # Wieder als URL mit Slash am Ende
+  weight = 2
+
+[[main]]
   name = "AI"
   identifier = "ai"
   url = "/ai/"             # Wieder als URL mit Slash am Ende
-  weight = 2
+  weight = 3
+
+# Untermenüpunkt: PCAP
+[[main]]
+  name = "PCAP"
+  identifier = "pcap"
+  parent = "python_certification"
+  url = "/python_certification/pcap/" # Direkte Ziel-URL
+  weight = 20
 
 # Untermenüpunkt: Functional Programming
 [[main]]
