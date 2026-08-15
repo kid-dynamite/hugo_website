@@ -77,3 +77,75 @@ print(int(sys1.run()), int(sys2.run()))
 B) 0 1
 """
 ```
+
+## 🔍 Der Lösungsweg Schritt für Schritt
+
+Hier ist die genaue Analyse, wie die Prüfung diesen Code auswertet:
+
+### 1. Die Instanziierung (Objekterzeugung)
+
+- **`dev1 = Screen(False)`**  
+  `Screen` erbt von `Device`. Da `Screen` keinen eigenen Konstruktor (`__init__`) hat, wird der Konstruktor von `Device` aufgerufen. `dev1.status` wird auf `False` gesetzt.
+- **`dev2 = Device(False)`**  
+  `dev2.status` wird ebenfalls auf `False` gesetzt.
+
+### 2. Die Kopplung (Dependency Injection)
+
+- `sys1 = System(dev1)` — `sys1.hardware` hält das `Screen`-Objekt.
+- `sys2 = System(dev2)` — `sys2.hardware` hält das `Device`-Objekt.
+
+### 3. Die Auswertung von `sys1.run()`
+
+`sys1.run()` ruft `self.hardware.action()` auf. Da `hardware` hier das `Screen`-Objekt (`dev1`) ist, wird die Methode `action()` in der Klasse `Screen` ausgeführt.
+
+- **Code-Logik:** `return self.status`
+- **Ergebnis:** Da `dev1.status` den Wert `False` hat, gibt `sys1.run()` den Wert **`False`** zurück.
+
+### 4. Die Auswertung von `sys2.run()`
+
+`sys2.run()` ruft ebenfalls `self.hardware.action()` auf. Da `hardware` hier das `Device`-Objekt (`dev2`) ist, wird die Methode `action()` in der Basisklasse `Device` ausgeführt.
+
+- **Code-Logik:** `return not self.status`
+- **Ergebnis:** Da `dev2.status` den Wert `False` hat, kehrt `not False` um zu **`True`**.
+
+### 5. Die Ausgabe (`print`)
+
+- `int(False)` wandelt sich in Python zu `0`.
+- `int(True)` wandelt sich in Python zu `1`.
+
+Das Ergebnis in der Konsole lautet somit: **`0 1`**
+
+> Population
+
+```python
+class Mouse:
+    Population = 0
+    def __init__(self, name):
+        Mouse.Population += 1  # Verändert die globale Klassenvariable
+        self.name = name
+
+# Zwei Mäuse werden erstellt
+m1 = Mouse("Mickey")
+m2 = Mouse("Minnie")
+
+print(Mouse.Population)  # Ausgabe: 2 (Korrekte Gesamtanzahl)
+print(m1.Population)     # Ausgabe: 2 (Greift auf die Klassenvariable zu)
+print(m2.Population)     # Ausgabe: 2 (Greift auf die Klassenvariable zu)
+
+#************************************************************
+
+class Mouse:
+    Population = 0
+    def __init__(self, name):
+        self.Population += 1  # Erstellt eine eigene Instanzvariable
+        self.name = name
+
+# Zwei Mäuse werden erstellt
+m1 = Mouse("Mickey")
+m2 = Mouse("Minnie")
+
+print(Mouse.Population)  # Ausgabe: 0 (Die Klassenvariable wurde nie erhöht!)
+print(m1.Population)     # Ausgabe: 1 (Nur m1 hat den Wert 1)
+print(m2.Population)     # Ausgabe: 1 (Auch m2 hat den Wert 1)
+
+```
