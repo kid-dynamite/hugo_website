@@ -130,3 +130,86 @@ for i in values:
 """
 
 ```
+
+```python
+class MeinBereich:
+    def __init__(self, start, ende):
+        self.start = start
+        self.ende = ende
+
+    def __iter__(self):
+        # yield macht diese Methode automatisch zu einem Iterator-Generator
+        self.aktuell = self.start
+        return self
+    def __next__(self):
+        if self.aktuell > self.ende:
+            raise StopIteration
+
+        ergebnis = self.aktuell
+        self.aktuell += 1
+        return ergebnis
+
+
+# Nutzung:
+for zahl in MeinBereich(1, 3):
+    print(zahl)  # Gibt 1, 2, 3 aus
+
+```
+
+```python
+class MeinBereich:
+    def __init__(self, start, ende):
+        self.start = start
+        self.ende = ende
+
+    def __iter__(self):
+        # yield macht diese Methode automatisch zu einem Iterator-Generator
+        aktuell = self.start
+        while aktuell <= self.ende:
+            yield aktuell
+            aktuell += 1
+
+# Nutzung:
+for zahl in MeinBereich(1, 3):
+    print(zahl)  # Gibt 1, 2, 3 aus
+
+```
+
+```python
+class Counter:
+    def __init__(self, limit):
+        self.limit = limit
+        self.wert = 0
+
+    def __iter__(self):
+        return self  # Gibt sich selbst als Iterator zurück
+
+    def __next__(self):
+        if self.wert < self.limit:
+            self.wert += 1
+            return self.wert
+        else:
+            raise StopIteration  # Signalisiert das Ende der Schleife
+
+# Nutzung:
+for n in Counter(3):
+    print(n)  # Gibt 1, 2, 3 aus
+
+```
+
+```python
+zahlen = [1, 2, 3, 4]
+
+# Jede Zahl soll verdoppelt werden
+ergebnis = map(lambda x: x * 2, zahlen)
+
+#print(list(ergebnis))
+# Ausgabe: [2, 4, 6, 8]
+
+for i in ergebnis:
+    print(i)
+
+a_func = lambda x: x * 2
+
+print((a_func(1)))
+```
