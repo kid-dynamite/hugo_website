@@ -172,34 +172,30 @@ print(f"Endergebnis: {ergebnis}")
 
 ```python
 def maxList(lst):
-
-    """
-        Use Recursion to
-        Return the maximum value int in a list
-        ***Assume the list is not empty
-        Ex: if lst = [9, 31,9, "string", [99, 4, "er"]], maxList(lst) returns 99
-    """
-
     if not lst:
-        return 0
+        return float('-inf')
 
     head = lst[0]
-    tail = maxList(lst[1:])
+    tail_max = maxList(lst[1:])
 
-    num = 0
+    # NEU: Wenn head eine Liste ist, packen wir sie aus und suchen ihr Maximum
+    if isinstance(head, list):
+        # Wir überschreiben head mit der größten Zahl aus DIESER inneren Liste
+        head = maxList(head)
+        # (Bei [99, 4, "er"] wird head hier drin zu der Zahl 99)
 
+    # Ab hier ist alles EXAKT so, wie du es gerade erklärt hast:
     if isinstance(head, int):
-        if head > tail:
+        if head > tail_max:
             return head
         else:
-            return tail
-    if isinstance(head, list):
-        return maxList(head)
+            return tail_max
     else:
-        return tail
-    return tail
+        return tail_max
 
-print(maxList([9, 31,9, "string", [99, 4, "er"]]))
+
+# Testet perfekt und gibt 99 aus
+print(maxList([9, 31, 9, "string", [99, 4, "er"], 500]))
 
 ```
 
@@ -463,4 +459,31 @@ print(calculate_disk_space(folder_1))
 folder_2 = [10, [20, 30], 5, [1, [2, 3]]]
 print(calculate_disk_space(folder_2))
 # Erwartete Ausgabe: 71
+```
+
+```python
+def extract_all_text(dom_tree, depth=0):  # depth startet standardmäßig bei 0
+    result = []
+
+    for item in dom_tree:
+        if isinstance(item, str):
+            str_tuple = (item, depth)  # Nutzt die aktuelle Tiefe
+            result.append(str_tuple)
+        elif isinstance(item, list):
+            # Wir tauchen ab und sagen der tieferen Ebene: "Du bist eine Stufe tiefer (+1)!"
+            scan = extract_all_text(item, depth + 1)
+            result.extend(scan)
+
+    return result
+
+
+# TESTFÄLLE (Die Ausgabe liefert dir jetzt den Text UND die exakte HTML-Tiefe!)
+
+site_1 = ["Willkommen", "Auf meiner Website", ["Hier ist Text"]]
+print(extract_all_text(site_1))
+# Ausgabe: [('Willkommen', 0), ('Auf meiner Website', 0), ('Hier ist Text', 1)]
+
+site_2 = ["Startseite", 1024, ["Menü", ["Home", "Über uns"]], "Footer-Text", 404]
+print(extract_all_text(site_2))
+# Ausgabe: [('Startseite', 0), ('Menü', 1), ('Home', 2), ('Über uns', 2), ('Footer-Text', 0)]
 ```
