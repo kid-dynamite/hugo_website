@@ -487,3 +487,63 @@ site_2 = ["Startseite", 1024, ["Menü", ["Home", "Über uns"]], "Footer-Text", 4
 print(extract_all_text(site_2))
 # Ausgabe: [('Startseite', 0), ('Menü', 1), ('Home', 2), ('Über uns', 2), ('Footer-Text', 0)]
 ```
+
+```python
+def render_dom_text(dom_tree, depth=0):
+    # HIER KOMMT DEIN CODE HIN
+    # Nutze Rekursion und Schleifen, um die Strings zu finden.
+    # Tipp: Ein Zeilenumbruch in Python ist "\n"
+
+    my_str = ""
+
+    for item in dom_tree:
+        if isinstance(item, str):
+            leerzeichen = " " * depth
+            my_str += leerzeichen + item + "\n"
+
+        if isinstance(item, list):
+            scan = render_dom_text(item, depth + 2)
+
+            my_str +=  scan
+    return my_str
+
+
+# TESTFALL
+site_2 = ["Startseite", 1024, ["Menü", ["Home", "Über uns"]], "Footer-Text", 404]
+
+# Das Ergebnis soll ein einziger, langer String mit Zeilenumbrüchen sein
+print(render_dom_text(site_2))
+```
+
+```python
+def clean_comments(post_data):
+    cleaned = []
+
+    # HIER KOMMT DEIN CODE HIN
+    # Nutze eine for-Schleife, um durch post_data zu gehen.
+    # Wenn es ein String ist: Prüfe, ob er NICHT "DELETED" ist, und füge ihn hinzu.
+    # Wenn es eine Liste (Unterkommentare) ist: Tauche per Rekursion ab!
+
+    for item in post_data:
+        if isinstance(item, str) and item != "DELETED":
+            cleaned.append(item)
+        if isinstance(item, list):
+            scan = clean_comments(item)
+            cleaned.extend(scan)
+
+
+    return cleaned
+
+
+# TESTDATEN (Ein Post mit Kommentaren und tiefen Unterkommentaren)
+social_post = [
+    "Tolles Foto!",
+    "DELETED",
+    ["Ich stimme zu!", "DELETED", ["Sehe ich auch so!", "Absolut!"]],
+    "Schöne Grüße!",
+    ["Ganz nett", "DELETED"]
+]
+
+# TESTAUFRUF
+print(clean_comments(social_post))
+```
