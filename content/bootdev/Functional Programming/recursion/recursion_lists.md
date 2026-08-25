@@ -21,115 +21,89 @@ def sum_nums(nums: list[int]) -> int:
 print(sum_nums([1, 2, 3, 4, 5]))        # prints: 15
 ```
 
-> Find max in a list
-
-```python
-def max_nums(nums: list[int]) -> int:
-    # Basis-Fall: Wenn nur noch ein Element da ist, ist es das Maximum
-    if len(nums) == 1:
-        return nums[0]
-    if len(nums) == 0:
-        return 0
-
-    # Rekursiver Aufruf: Finde das Maximum im Rest der Liste (tail)
-    max_of_rest = max_nums(nums[1:])
-
-    # Vergleiche das erste Element mit dem Maximum des Rests
-    print(nums)
-    if nums[0] > max_of_rest:
-        return nums[0]
-    else:
-        return max_of_rest
-
-print(max_nums([1, 2, 3, 4, 5]))  # Ausgabe: 5
-```
-
-> Find max in a list
-
-```python
-def maxList(lst):
-
-    """
-        Use Recursion to
-        Return the maximum value int in a list
-        ***Assume the list is not empty
-        Ex: if lst = [9, 31,9], maxList(lst) returns 31
-    """
-
-
-    if len(lst) == 1:
-        return lst[0]
-    else:
-        tempMax = maxList(lst[1:])
-        return lst [0] if lst[0] > tempMax else tempMax
-print(maxList([9, 31,9,7]))
-```
-
 > Find Max in nested list
 
 ```python
 def maxList(lst):
-
     """
-        Use Recursion to
-        Return the maximum value int in a list
-        ***Assume the list is not empty
-        Ex: if lst = [9, 31,9, "string", [99, 4, "er"]], maxList(lst) returns 99
+    Nutzt eine Schleife für die Hauptebene und Rekursion für verschachtelte Listen.
+    Berücksichtigt ausschließlich int-Werte.
     """
+    tempMax = float("-inf")
 
-    if len(lst) == 0:
-        return None
-    else:
-        tempMax = float("-inf")
-        for item in lst:
-            if isinstance(item, list):
-                max_in_nested = maxList(item)
-                if max_in_nested is not None and max_in_nested > tempMax:
-                    tempMax = max_in_nested
-            elif isinstance(item, int):
-                if item > tempMax:
-                    tempMax = item
-        return tempMax if tempMax != float("-inf") else None
+    for item in lst:
+        if isinstance(item, int):
+            if item > tempMax:
+                tempMax = item
 
-print(maxList([9, 31,9, "string", [99, 4, "er"]]))
+        if isinstance(item, list):
+            result = maxList(item)
+            if result > tempMax:
+                tempMax = result
+
+    return tempMax if tempMax != float("-inf") else None
+
+
+# Testlauf
+print(maxList([9, 31, 9, "string", [99, 4.5, "er"],500])) # Ausgabe: 99 (4.5 wird ignoriert)
+
 ```
 
-### Ein konkretes Beispiel im Zeitraffen
+> Flatten list with for-loop
 
-Schauen wir uns an, was bei `maxList([9, [99, 4]])` passiert:
+```python
+def flatten_ints(lst):
+    """
+    Sammelt alle int-Werte aus einer verschachtelten Liste in einer flachen Liste.
+    """
+    res = []
 
-#### 1. Die Hauptfunktion startet (Runde 1)
+    for x in lst:
+        if isinstance(x, int):
+            res.append(x)
+        elif isinstance(x, list):
+            sub_res = flatten_ints(x)
+            res.extend(sub_res)
 
-- Sie sieht die `9`. Das ist ein `int`.
-- `tempMax` der Hauptfunktion wird `9`.
-- Jetzt kommt das nächste Element: `[99, 4]`. Das ist eine Liste!
-- Die Hauptfunktion pausiert in der Zeile: `max_in_nested = maxList([99, 4])`
+    return res
 
-#### 2. Die Funktion startet neu für die innere Liste (Runde 2)
 
-- Diese Runde hat ihr **eigenes, neues** `tempMax` (wieder gestartet bei -∞).
-- Sie sieht `99` → ihr `tempMax` wird `99`.
-- Sie sieht `4` → `99` bleibt größer.
-- Die Liste ist zu Ende. Runde 2 erreicht die Zeile `return tempMax`.
-- Da `tempMax` hier `99` ist, sagt die Funktion: **`return 99`**. Runde 2 schließt sich.
+# Testlauf
+daten = [9, 31, 9, "string", [99, 4.5, "er"], 500]
+print(flatten_ints(daten))
+# Ausgabe: [9, 31, 9, 99, 500]
 
-#### 3. Zurück in der Hauptfunktion (Runde 1)
 
-- Der Aufruf `maxList([99, 4])` wird nun durch das Ergebnis `99` ersetzt.
-- Die Zeile liest sich jetzt so:
-  ```python
-  max_in_nested = 99
-  ```
-- **Jetzt** hat `max_in_nested` den Wert `99` gespeichert!
-- Erst danach folgt der Vergleich in der Hauptfunktion:
-  ```python
-  if max_in_nested > tempMax:  # Ist 99 > 9? Ja!
-      tempMax = max_in_nested  # Haupt-tempMax wird 99
-  ```
+```
 
-### Zusammenfassung
+> Increment ints by 1 in nested list
 
-`max_in_nested` selbst sucht nicht nach Zahlen. Es ist wie ein **Postbote**. Es wartet geduldig, bis der rekursive Aufruf (`maxList(item)`) fertig geschaut hat, nimmt das Endergebnis (den `return`-Wert) entgegen und hält es für den anschließenden Vergleich bereit.
+```python
+def inc_nested(lst):
+    """
+    Erhöht alle int-Werte in einer verschachtelten Liste um 1.
+    """
+    res = []
+
+    for x in lst:
+        if isinstance(x, int):
+            res.append(x + 1)
+
+        elif isinstance(x, list):
+            sub_res = inc_nested(x)
+            res.append(sub_res)
+
+        else:
+            res.append(x)
+
+    return res
+
+
+# Testlauf
+daten = [9, 31, 9, "string", [99, 4.5, "er"], 500]
+print(inc_nested(daten))
+# Ausgabe: [10, 32, 10, 'string', [100, 4.5, 'er'], 501]
+```
 
 ```python
 def maxList(lst):
@@ -166,105 +140,6 @@ print("=== START DES PROGRAMMS ===")
 ergebnis = maxList([9, 31, 9, "string", [99, [201, [501]], 4, "er"]])
 print("===========================")
 print(f"Endergebnis: {ergebnis}")
-```
-
-> Find Max in a nested list --> real recursion
-
-```python
-def maxList(lst):
-    if not lst:
-        return float('-inf')
-
-    head = lst[0]
-    tail_max = maxList(lst[1:])
-
-    # NEU: Wenn head eine Liste ist, packen wir sie aus und suchen ihr Maximum
-    if isinstance(head, list):
-        # Wir überschreiben head mit der größten Zahl aus DIESER inneren Liste
-        head = maxList(head)
-        # (Bei [99, 4, "er"] wird head hier drin zu der Zahl 99)
-
-    # Ab hier ist alles EXAKT so, wie du es gerade erklärt hast:
-    if isinstance(head, int):
-        if head > tail_max:
-            return head
-        else:
-            return tail_max
-    else:
-        return tail_max
-
-
-# Testet perfekt und gibt 99 aus
-print(maxList([9, 31, 9, "string", [99, 4, "er"], 500]))
-
-```
-
-> Count strings in a nested list
-
-```python
-def count_strings(lst):
-    # Passe den Basis-Fall an: Was wird bei einer leeren Liste zurückgegeben?
-    if not lst:
-        return 0
-
-    head = lst[0]
-    tail = count_strings(lst[1:])
-
-    if isinstance(head, str):
-        return 1 + tail
-
-    if isinstance(head, list):
-        return count_strings(head) + tail
-
-
-    return tail
-
-    # Ergänze hier deine rekursive Logik und die Typ-Prüfungen
-
-
-
-
-# Test-Aufruf (Das erwartete Ergebnis für diese Liste ist 4)
-values = [1, "Apfel", [2, "Banane"], "Orange", [3, [4, "Erdbeere"]]]
-result = count_strings(values)
-
-print(result)
-# Erwartete Ausgabe: 4
-```
-
-> Some math in nested lists --> modulo
-
-```python
-def sum_even_numbers(lst):
-    # Basis-Fall: Was gibt eine leere Liste beim Zusammenrechnen als Basis zurück?
-    if not lst:
-        return 0
-
-    head = lst[0]
-    tail = sum_even_numbers(lst[1:])
-
-
-    # Ergänze hier deine rekursive Logik und die Prüfungen
-    if isinstance(head, int):
-        if head % 2 == 0:
-            return head + tail
-    if isinstance(head, list):
-        return sum_even_numbers(head) + tail
-
-
-    return tail
-
-
-
-
-
-# Test-Aufruf (Erwartetes Ergebnis: 2 + 4 + 6 = 12)
-# Die 3, 5 und "Hallo" müssen ignoriert werden!
-values = [2, 3, [4, "Hallo"], 5, [6]]
-result = sum_even_numbers(values)
-
-print(result)
-# Erwartete Ausgabe: 12
 ```
 
 > Calc the sum of all int i a list
@@ -331,38 +206,6 @@ def maxDepth(lst):
 print(maxDepth([9, 31, 9, "string", [99, 4, "er"]])) # Gibt 2 aus
 print(maxDepth([1, [2, [3, [4]]]]))                  # Gibt 4 aus
 
-```
-
-> return a new list without None
-
-```python
-def remove_none_values(data):
-    if not data:
-        return []
-
-    head = data[0]
-    tail = remove_none_values(data[1:])
-
-    if isinstance(head, list):
-        # Wichtig: head rekursiv reinigen UND in eine Liste packen [[...]],
-        # damit die Struktur erhalten bleibt, wenn wir es mit tail verbinden!
-        return [remove_none_values(head)] + tail
-    elif head is None:
-        # Wenn es None ist, werfen wir es weg und geben nur den Rest zurück
-        return tail
-    else:
-        # Für alle anderen gültigen Werte (wie int, str etc.):
-        # Wir packen head in eine Liste [head] und hängen tail hinten dran
-        return [head] + tail
-
-# TESTFÄLLE
-list_1 = [1, None, 3]
-print(remove_none_values(list_1))
-# Ausgabe: [1, 3]
-
-list_2 = [1, [2, None, 3], None, [None, [4, 5]]]
-print(remove_none_values(list_2))
-# Ausgabe: [1, [2, 3], [[4, 5]]]
 ```
 
 > with for-loop and recursion
@@ -546,4 +389,213 @@ social_post = [
 
 # TESTAUFRUF
 print(clean_comments(social_post))
+```
+
+```python
+def find_and_count(lst, target):
+    # Initialisiere deine Variablen (Akkumulatoren)
+    found = False
+    count = 0
+
+    """
+        Nutze eine for-Schleife.
+        Wenn ein Element eine Liste ist -> rekursiver Aufruf.
+        Wenn ein Element direkt das 'target' ist -> Zähler erhöhen und found auf True setzen.
+    """
+    for item in lst:
+        if item == target:
+            found = True
+            count += 1
+        elif isinstance(item, list):
+            sub_found, sub_count = find_and_count(item, target)
+            found = found or sub_found
+            count += sub_count
+            #print(result)
+
+
+    return (found, count)
+
+
+# --- TESTCASES ---
+# Test 1: Normaler Treffer
+nested_1 = [1, 2, "such mich", [3, "such mich", [4]], "such mich"]
+print(find_and_count(nested_1, "such mich"))
+# Erwartete Ausgabe: (True, 3)
+
+# Test 2: Element existiert nicht
+nested_2 = [1, 2, [3, 4]]
+print(find_and_count(nested_2, 99))
+# Erwartete Ausgabe: (False, 0)
+
+```
+
+> Count depth of a list
+
+```python
+def get_depth(lst):
+    """
+    Ermittelt die maximale Tiefe einer verschachtelten Liste mittels Rekursion.
+    Eine flache Liste hat die Tiefe 1.
+    """
+    # Basisfall: Wenn es keine Liste ist, hat es keine Tiefe
+    if not isinstance(lst, list):
+        return 0
+
+    max_sub_depth = 0
+
+    # Schleife durchläuft die aktuelle Ebene
+    for x in lst:
+        if isinstance(x, list):
+            # Rekursiver Aufruf: Wie tief ist diese Unterliste?
+            sub_depth = get_depth(x)
+
+            # Merke dir die tiefste gefundene Unterliste
+            if sub_depth > max_sub_depth:
+                max_sub_depth = sub_depth
+
+    # 1 für die aktuelle Ebene plus die Tiefe der tiefsten Unterliste
+    return 1 + max_sub_depth
+
+
+# --- Testläufe ---
+
+# Ebene 1: Eine normale flache Liste
+print(get_depth([1, 2, 3]))
+# Ausgabe: 1
+
+# Ebene 2: Eine Liste in einer Liste
+print(get_depth([1, [2, 3], 4]))
+# Ausgabe: 2
+
+# Ebene 3: Drei Ebenen tief verschachtelt
+print(get_depth([9, 31, ["string", [99, "er"]], 500]))
+# Ausgabe: 3
+
+# Ebene 4: Noch eine Ebene tiefer eingebettet
+print(get_depth([1, [2, [3, [4]]]]))
+# Ausgabe: 4
+
+"""
+get_depth([ [ [ ] ] ])       --> Wartet auf Ebene 2... erhält 2. Rechnet 1 + 2. Return 3! (ENDE)
+   └── get_depth([ [ ] ])    --> Wartet auf Ebene 3... erhält 1. Rechnet 1 + 1. Return 2!
+          └── get_depth([ ]) --> Tiefste Ebene! Keine Unterliste. Rechnet 1 + 0. Return 1!
+"""
+```
+
+---
+
+title: "Die visuelle Funktionsweise der Rekursion"
+date: 2026-08-21
+draft: false
+description: "Eine schrittweise Erklärung, wie der Call-Stack bei verschachtelten Listen im Speicher arbeitet."
+
+---
+
+{{< lead >}}
+Stellen Sie sich jeden Funktionsaufruf wie eine eigene, isolierte Box vor. Jede Box hat ihr eigenes `lst` und ihr eigenes `max_sub_depth`.
+{{< /lead >}}
+
+## Die 3 isolierten Boxen im Speicher
+
+### Schritt 1: Der Hinweg (In die Tiefe gehen)
+
+- **Box 1 (Ebene 1) startet:**
+  - `lst` = `[1, [2,]]`
+  - `max_sub_depth` = **0**
+  - Die Schleife sieht `1` (Zahl → ignoriert).
+  - Die Schleife sieht `[2,]` (Liste → **Pause!** Rufe Box 2 auf).
+
+- **Box 2 (Ebene 2) startet:**
+  - `lst` = `[2,]`
+  - Ein _neues_ `max_sub_depth` = **0** wird erzeugt.
+  - Die Schleife sieht `2` (Zahl → ignoriert).
+  - Die Schleife sieht `` (Liste → **Pause!** Rufe Box 3 auf).
+
+- **Box 3 (Ebene 3) startet:**
+  - `lst` = ``
+  - Ein _drittes_ `max_sub_depth` = **0** wird erzeugt.
+  - Die Schleife sieht `3` (Zahl → ignoriert).
+  - Die Schleife ist fertig. `max_sub_depth` in Box 3 blieb **0**.
+
+---
+
+### Schritt 2: Der Rückweg (Die Rückrechnung)
+
+Jetzt schließt sich der Kreis von unten nach oben. Hier passiert die entscheidende Veränderung im Speicher:
+
+1. **Box 3 rechnet und schließt:**
+   - Box 3 rechnet: `1 + max_sub_depth` → `1 + 0 = 1`.
+   - Sie schickt `1` zurück an Box 2 und wird gelöscht.
+
+2. **Box 2 wacht auf und verändert sich:**
+   - Box 2 empfängt `sub_depth = 1` von Box 3.
+   - Sie prüft: Ist `sub_depth (1) > max_sub_depth (0)`? **Ja!**
+   - **Hier ändert es sich:** Das `max_sub_depth` von Box 2 wird auf **1** gesetzt.
+   - Die Schleife von Box 2 ist fertig.
+   - Box 2 rechnet: `1 + max_sub_depth` → `1 + 1 = 2`.
+   - Sie schickt `2` zurück an Box 1 und wird gelöscht.
+
+3. **Box 1 wacht auf und verändert sich:**
+   - Box 1 empfängt `sub_depth = 2` von Box 2.
+   - Sie prüft: Ist `sub_depth (2) > max_sub_depth (0)`? **Ja!**
+   - **Hier ändert es sich wieder:** Das `max_sub_depth` von Box 1 wird auf **2** gesetzt.
+   - Die Schleife von Box 1 ist fertig.
+   - Box 1 rechnet das Endergebnis: `1 + max_sub_depth` → `1 + 2 = 3`.
+
+::: { .font-bold .text-xl .text-primary-500 .mt-4 }
+Endergebnis: 3
+:::
+
+```python
+class Node:
+    def __init__(self, name, is_folder=False, size=0):
+        self.name = name
+        self.is_folder = is_folder  # True wenn Ordner, False wenn Datei
+        self.size = size            # Größe in MB (nur relevant, wenn is_folder=False)
+        self.children = []          # Liste von anderen Node-Objekten (nur wenn is_folder=True)
+
+    def add_child(self, child_node):
+        self.children.append(child_node)
+
+    def get_total_size(self):
+        # Wenn der aktuelle Node eine Datei ist, ist die Größe einfach self.size
+        if not self.is_folder:
+            return self.size
+
+        # Wenn es ein Ordner ist, müssen wir die Größen aller Kinder zusammenrechnen
+        total_size = 0
+
+        # HIER DEINE LOGIK REINSCHREIBEN
+        # Schleife durch self.children...
+        # Rekursiver Aufruf für jedes Kind...
+
+        return total_size
+
+
+# --- TESTCASE (Der Verzeichnisbaum) ---
+# Wir bauen eine Struktur:
+# root_ordner/
+#   ├── foto.jpg (5 MB)
+#   └── projekte_ordner/
+#         ├── text.txt (2 MB)
+#         └── code.py (3 MB)
+
+root = Node("root_ordner", is_folder=True)
+foto = Node("foto.jpg", is_folder=False, size=5)
+
+projekte = Node("projekte_ordner", is_folder=True)
+text = Node("text.txt", is_folder=False, size=2)
+code = Node("code.py", is_folder=False, size=3)
+
+# Baum zusammenbauen
+projekte.add_child(text)
+projekte.add_child(code)
+
+root.add_child(foto)
+root.add_child(projekte)
+
+# Test-Aufruf
+print(root.get_total_size())
+# ERWARTETE AUSGABE: 10
+# (Erklärung: 5MB vom Foto + 2MB Text + 3MB Code = 10MB)
 ```

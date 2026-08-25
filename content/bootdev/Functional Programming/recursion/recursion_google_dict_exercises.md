@@ -336,9 +336,7 @@ def find_path_in_dict(nested_dict: dict, target_word: str) -> list or None:
 
     # Wenn das Wort in diesem gesamten (Unter-)Dictionary nicht existiert
     return None
-also wir, da info ein dict ist rekursive in die funktion.
-da stadt : berlin ist gibt elif value == target_word: den pfad
-an result = weiter - richtig?
+
 
 
 # --- TESTBEREICH ---
@@ -528,4 +526,248 @@ test_2 = {
 
 print(f"Tiefe Test 1: Dein Ergebnis: {get_max_depth(test_1)} | Richtig: 1")
 print(f"Tiefe Test 2: Dein Ergebnis: {get_max_depth(test_2)} | Richtig: 3")
+```
+
+```python
+def count_leaves(nested_dict: dict) -> int:
+    # Wenn das Dictionary komplett leer ist ({}), gibt es 0 Blätter
+    if not nested_dict:
+        return 0
+
+    total_leaves = 0
+
+    for key, value in nested_dict.items():
+        if isinstance(value, dict):
+
+            sub_leaves = count_leaves(value)
+            total_leaves += sub_leaves
+
+        else:
+            total_leaves += 1
+
+
+
+    # 4. Schritt: Was gibt diese Etage an die obere Etage zurück?
+    return total_leaves
+
+
+# --- TESTBEREICH ---
+# Hier sind 3 Blätter versteckt: 1, 2 und 3
+test_1 = {
+    "a": 1,
+    "b": 2,
+    "c": 3
+}
+
+# Hier sind trotz der Tiefe nur 2 Blätter versteckt: 42 und "Hallo"
+test_2 = {
+    "ordner_1": {
+        "datei_1": 42,
+        "unterordner": {
+            "leerer_ordner": {} # Das ist kein Blatt, da leer
+        }
+    },
+    "ordner_2": {
+        "datei_2": "Hallo"
+    }
+}
+
+print(f"Blätter Test 1: Dein Ergebnis: {count_leaves(test_1)} | Richtig: 3")
+print(f"Blätter Test 2: Dein Ergebnis: {count_leaves(test_2)} | Richtig: 2")
+```
+
+```python
+def apply_discount(nested_catalog: dict, discount_percent: float) -> dict:
+    # Wir bauen ein NEUES Dictionary für diese Etage auf
+    discounted_catalog = {}
+
+    for key, value in nested_catalog.items():
+        if isinstance(value, dict):
+            # 1. Schritt: Rekursion für den Unterordner/Unterkategorie
+            # Was liefert dir dieser Aufruf zurück? Ein reduziertes Unter-Dict!
+            sub_discounted = apply_discount(value, discount_percent)
+
+            # 2. Schritt: Das reduzierte Unter-Dict im neuen Katalog speichern
+            discounted_catalog[key] = sub_discounted
+        else:
+            # 3. Schritt: Es ist ein Preis (eine Zahl).
+            # Berechne den neuen Preis und speichere ihn ab!
+            # TIPP: neuer_preis = value * (1 - discount_percent)
+            pass
+
+    # 4. Schritt: Das fertig umgestellte Dict an die obere Etage zurückgeben
+    return discounted_catalog
+
+
+# --- TESTBEREICH ---
+katalog = {
+    "Schuhe": 100,
+    "Kleidung": {
+        "T-Shirts": 20,
+        "Hosen": {
+            "Jeans": 50
+        }
+    }
+}
+
+# 10% Rabatt (0.10)
+ergebnis = apply_discount(katalog, 0.10)
+print(ergebnis)
+# Erwartete Ausgabe:
+# {'Schuhe': 90.0, 'Kleidung': {'T-Shirts': 18.0, 'Hosen': {'Jeans': 45.0}}}
+```
+
+```python
+def finde_gehalt_und_ebene(firma_struktur: dict) -> tuple:
+    # Wir starten auf der aktuellen Ebene mit der Zählung bei 1
+    aktuelle_ebene = 1
+
+    for job, wert in firma_struktur.items():
+
+        # Fall 1: Das gesuchte Gehalt wurde direkt hier gefunden
+        if wert == 3500:
+            return (wert, aktuelle_ebene)
+
+        # Fall 2: Wir finden eine Unterabteilung (ein weiteres Dictionary)
+        if isinstance(wert, dict):
+            ergebnis_aus_tiefe = finde_gehalt_und_ebene(wert)
+
+            # Wenn in der Unterabteilung ein Treffer erzielt wurde
+            if ergebnis_aus_tiefe is not None:
+                # Wir entpacken das Tupel einzeln, um mit der Ebene rechnen zu können
+                gehalt, gefundene_ebene = ergebnis_aus_tiefe
+
+                # Wir geben das Gehalt unverändert und die Ebene + 1 zurück
+                return (gehalt, gefundene_ebene + 1)
+
+    # Fall 3: Nichts gefunden in diesem Zweig
+    return None
+
+
+# --- TESTBEREICH ---
+test_firma = {
+    "Chef": 5000,
+    "Marketing": {
+        "Manager": 4000,
+        "Praktikant": 1000
+    },
+    "IT": {
+        "Lead": 6000,
+        "Devs": {
+            "Senior": 5500,
+            "Junior": 3500  # Liegt auf Ebene 3
+        }
+    }
+}
+
+ergebnis = finde_gehalt_und_ebene(test_firma)
+
+print(f"Gefundenes Gehalt und Ebene: {ergebnis}")
+```
+
+```python
+def finde_job_nach_gehalt(firma_struktur: dict) -> str:
+    # Hier suchen wir nach dem Gehalt 3500
+
+    path = []
+
+    for job, wert in firma_struktur.items():
+
+        # Fall 1: Das Gehalt passt direkt auf dieser Ebene
+        if wert == 3500:
+            return [job]
+
+
+
+        if isinstance(wert, dict):
+            result = finde_job_nach_gehalt(wert)
+            print(job)
+
+
+
+
+            if result is not None:
+                return [job] + result
+
+
+
+    return None
+
+
+# --- TESTBEREICH ---
+test_firma = {
+    "Chef": 5000,
+    "Marketing": {
+        "Manager": 4000,
+        "Praktikant": 1000
+    },
+    "IT": {
+        "Lead": 6000,
+        "Devs": {
+            "Senior": 5500,
+            "Junior": 3500  # Erwartetes Ergebnis: "Junior"
+        }
+    }
+}
+
+ergebnis = finde_job_nach_gehalt(test_firma)
+print(f"Gefundener Job: {ergebnis}")
+```
+
+```python
+def find_api_errors(data) -> list:
+    errors = []
+
+    # 1. BASIFFALL / PRÜFUNG: Ist es ein Dictionary?
+    if isinstance(data, dict):
+
+
+        # Prüfe, ob DIESES Dictionary direkt ein Fehler ist
+        if data.get("status") == "error" and "message" in data:
+            errors.append(data["message"])
+
+        for value in data.values():
+            result = find_api_errors(value)
+            errors.extend(result)
+
+
+
+    elif isinstance(data, list):
+        for item in data:
+            result = find_api_errors(item)
+            errors.extend(result)
+            #print(result)
+
+
+    return errors
+
+# --- TESTBEREICH ---
+# Testdaten: Ein komplexer API-Antwort-Mix
+api_response = {
+    "response_code": 200,
+    "data": {
+        "users": [
+            {"id": 1, "name": "Alice", "status": "active"},
+            # Fehler 1 versteckt in einer Liste von Usern:
+            {"id": 2, "status": "error", "message": "User ist gesperrt"}
+        ],
+        "system_alerts": {
+            # Fehler 2 tief im System-Zweig:
+            "database": {"status": "error", "message": "Verbindungsausfall"},
+            "maintenance": False
+        }
+    },
+    # Fehler 3 direkt auf der oberen Ebene in einer Liste:
+    "background_jobs": [
+        {"job_id": 99, "status": "error", "message": "Backup fehlgeschlagen"}
+    ]
+}
+
+erwartet = ["User ist gesperrt", "Verbindungsausfall", "Backup fehlgeschlagen"]
+ergebnis = find_api_errors(api_response)
+
+# Da die Reihenfolge je nach Durchlauf variieren kann, sortieren wir für den Vergleich
+print(f"Dein Ergebnis: {sorted(ergebnis)}")
+print(f"Richtig:       {sorted(erwartet)}")
+print(f"Erfolgreich?   {sorted(ergebnis) == sorted(erwartet)}")
 ```

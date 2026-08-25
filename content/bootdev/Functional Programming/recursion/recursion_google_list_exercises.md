@@ -245,3 +245,178 @@ verschachtelte_liste = [1, [2, 3], [2, [4, 2]]]
 print(ersetze_zahl_tief(verschachtelte_liste, alt=2, neu=99))
 # Gibt exakt aus: [1, [99, 3], [99, [4, 99]]]
 ```
+
+> Find max in a list
+
+```python
+def max_nums(nums: list[int]) -> int:
+    # Basis-Fall: Wenn nur noch ein Element da ist, ist es das Maximum
+    if len(nums) == 1:
+        return nums[0]
+    if len(nums) == 0:
+        return 0
+
+    # Rekursiver Aufruf: Finde das Maximum im Rest der Liste (tail)
+    max_of_rest = max_nums(nums[1:])
+
+    # Vergleiche das erste Element mit dem Maximum des Rests
+    print(nums)
+    if nums[0] > max_of_rest:
+        return nums[0]
+    else:
+        return max_of_rest
+
+print(max_nums([1, 2, 3, 4, 5]))  # Ausgabe: 5
+```
+
+> Find max in a list
+
+```python
+def maxList(lst):
+
+    """
+        Use Recursion to
+        Return the maximum value int in a list
+        ***Assume the list is not empty
+        Ex: if lst = [9, 31,9], maxList(lst) returns 31
+    """
+
+
+    if len(lst) == 1:
+        return lst[0]
+    else:
+        tempMax = maxList(lst[1:])
+        return lst [0] if lst[0] > tempMax else tempMax
+print(maxList([9, 31,9,7]))
+```
+
+> Find Max in a nested list --> real recursion
+
+```python
+def maxList(lst):
+    if not lst:
+        return float('-inf')
+
+    head = lst[0]
+    tail_max = maxList(lst[1:])
+
+    # NEU: Wenn head eine Liste ist, packen wir sie aus und suchen ihr Maximum
+    if isinstance(head, list):
+        # Wir überschreiben head mit der größten Zahl aus DIESER inneren Liste
+        head = maxList(head)
+        # (Bei [99, 4, "er"] wird head hier drin zu der Zahl 99)
+
+    # Ab hier ist alles EXAKT so, wie du es gerade erklärt hast:
+    if isinstance(head, int):
+        if head > tail_max:
+            return head
+        else:
+            return tail_max
+    else:
+        return tail_max
+
+
+# Testet perfekt und gibt 99 aus
+print(maxList([9, 31, 9, "string", [99, 4, "er"], 500]))
+
+```
+
+> Count strings in a nested list
+
+```python
+def count_strings(lst):
+    # Passe den Basis-Fall an: Was wird bei einer leeren Liste zurückgegeben?
+    if not lst:
+        return 0
+
+    head = lst[0]
+    tail = count_strings(lst[1:])
+
+    if isinstance(head, str):
+        return 1 + tail
+
+    if isinstance(head, list):
+        return count_strings(head) + tail
+
+
+    return tail
+
+    # Ergänze hier deine rekursive Logik und die Typ-Prüfungen
+
+
+
+
+# Test-Aufruf (Das erwartete Ergebnis für diese Liste ist 4)
+values = [1, "Apfel", [2, "Banane"], "Orange", [3, [4, "Erdbeere"]]]
+result = count_strings(values)
+
+print(result)
+# Erwartete Ausgabe: 4
+```
+
+> Some math in nested lists --> modulo
+
+```python
+def sum_even_numbers(lst):
+    # Basis-Fall: Was gibt eine leere Liste beim Zusammenrechnen als Basis zurück?
+    if not lst:
+        return 0
+
+    head = lst[0]
+    tail = sum_even_numbers(lst[1:])
+
+
+    # Ergänze hier deine rekursive Logik und die Prüfungen
+    if isinstance(head, int):
+        if head % 2 == 0:
+            return head + tail
+    if isinstance(head, list):
+        return sum_even_numbers(head) + tail
+
+
+    return tail
+
+
+
+
+
+# Test-Aufruf (Erwartetes Ergebnis: 2 + 4 + 6 = 12)
+# Die 3, 5 und "Hallo" müssen ignoriert werden!
+values = [2, 3, [4, "Hallo"], 5, [6]]
+result = sum_even_numbers(values)
+
+print(result)
+# Erwartete Ausgabe: 12
+```
+
+> return a new list without None
+
+```python
+def remove_none_values(data):
+    if not data:
+        return []
+
+    head = data[0]
+    tail = remove_none_values(data[1:])
+
+    if isinstance(head, list):
+        # Wichtig: head rekursiv reinigen UND in eine Liste packen [[...]],
+        # damit die Struktur erhalten bleibt, wenn wir es mit tail verbinden!
+        return [remove_none_values(head)] + tail
+    elif head is None:
+        # Wenn es None ist, werfen wir es weg und geben nur den Rest zurück
+        return tail
+    else:
+        # Für alle anderen gültigen Werte (wie int, str etc.):
+        # Wir packen head in eine Liste [head] und hängen tail hinten dran
+        return [head] + tail
+
+# TESTFÄLLE
+list_1 = [1, None, 3]
+print(remove_none_values(list_1))
+# Ausgabe: [1, 3]
+
+list_2 = [1, [2, None, 3], None, [None, [4, 5]]]
+print(remove_none_values(list_2))
+# Ausgabe: [1, [2, 3], [[4, 5]]]
+```

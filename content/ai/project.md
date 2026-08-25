@@ -337,3 +337,82 @@ Da die hochwertigsten Inhalte auf Englisch sind, fährst du mit diesen Begriffen
 - `FastAPI Docker Compose PostgreSQL tutorial` (Verbindung von App + Datenbank)
 - `Python Microservices with FastAPI and Docker` (Kommunikation mehrerer Container)
 - `FastAPI Production Setup` (Best Practices für echte Server)
+
+> Another One
+
+---
+
+title: "Projektplan: Custom Multi-Agent Framework (OOP)"
+date: 2026-08-25
+description: "Architektur und Leitfaden für mein erstes eigenständiges Boot.dev Portfolio-Projekt im LLMOps-Pfad."
+tags: ["python", "oop", "llmops", "agents", "bootdev"]
+categories: ["Portfolio", "Software Engineering"]
+showToc: true
+TocOpen: true
+draft: false
+
+---
+
+## 🎯 Projekt-Übersicht
+
+Dieses Projekt ist mein **First Personal Project** für Boot.dev. Es verbindet die Grundlagen der **Objektorientierten Programmierung (OOP)** in Python mit den Konzepten aus dem Modul **"Build an AI Agent"**.
+
+Anstatt fertige Bibliotheken wie CrewAI zu nutzen, wird die Kern-Infrastruktur für ein sequenzielles Multi-Agenten-System komplett von Grund auf selbst gebaut.
+
+---
+
+## 🏗️ System-Architektur (Klassen-Design)
+
+Das Framework basiert auf drei zentralen, eng miteinander verzahnten Python-Klassen:
+
+### 1. Klasse: `Agent`
+
+Repräsentiert eine spezialisierte KI-Persönlichkeit.
+
+- **Attribute:**
+  - `name` _(str)_: Name des Agenten (z. B. "Researcher").
+  - `role` _(str)_: Fachgebiet (z. B. "Findet relevante Fakten zu Thema X").
+  - `backstory` _(str)_: System-Prompt-Erweiterung, um der KI Kontext und Tonalität zu geben.
+  - `llm_client` _(Object)_: Die konfigurierte Verbindung zur API (OpenAI / Ollama).
+- **Methoden:**
+  - `execute_task(task_description, context_data=None)`: Kombiniert Rolle, Backstory, Aufgabe und den Kontext vorheriger Agenten zu einem Prompt, sendet ihn an die API und liefert die Antwort zurück.
+
+### 2. Klasse: `Task`
+
+Definiert eine spezifische Aufgabe innerhalb der Kette.
+
+- **Attribute:**
+  - `description` _(str)_: Die genaue Arbeitsanweisung.
+  - `expected_output` _(str)_: Beschreibung des gewünschten Formats (z. B. "Eine Markdown-Tabelle").
+  - `assigned_agent` _(Agent)_: Eine Instanz der `Agent`-Klasse, die diese Aufgabe ausführen soll.
+  - `output` _(str)_: Speichert das finale Ergebnis, sobald die Task abgearbeitet wurde.
+
+### 3. Klasse: `Crew` (Der Orchestrator)
+
+Das Gehirn, das den Ablauf steuert.
+
+- **Attribute:**
+  - `agents` _(List[Agent])_: Liste aller beteiligten Agenten.
+  - `tasks` _(List[Task])_: Liste der abzuarbeitenden Aufgaben in sequenzieller Reihenfolge.
+- **Methoden:**
+  - `kickoff()`: Iteriert durch die `tasks`. Übergibt den Output der jeweils _vorherigen_ Task als Kontext an die nächste Task, ruft `execute_task()` auf dem zugewiesenen Agenten auf und speichert das Ergebnis.
+
+---
+
+## 🚀 Boot.dev Anforderungen & Workflow
+
+Da es sich um ein freies Modul handelt, müssen folgende Schritte lokal und auf GitHub dokumentiert werden:
+
+- [ ] **Lokales Git-Repository:** Projektordner erstellen und sofort mit `git init` initialisieren.
+- [ ] **Saubere Commits:** Entwicklungsschritte (Klassendesign, API-Integration, Testing) in logischen Git-Commits festhalten.
+- [ ] **GitHub Repository:** Code in ein öffentliches GitHub-Repository pushen.
+- [ ] **README.md:** Eine verständliche Dokumentation schreiben, die erklärt, wie man das Framework installiert und eigene Agenten definiert.
+- [ ] **Community Review:** Link im Boot.dev-Discord für Feedback und Freischaltung einreichen.
+
+---
+
+## 🛠️ Nächste Schritte (Morgen)
+
+1. **API-Setup klären:** Festlegen, ob das Framework über die **OpenAI API** oder lokal via **Ollama** laufen soll.
+2. **Die erste Datei (`main.py`) anlegen:** Das Grundgerüst für die Klasse `Agent` schreiben.
+3. **Erster Test-Call:** Sicherstellen, dass die Klasse erfolgreich mit dem LLM kommunizieren kann.
