@@ -127,6 +127,8 @@ def join_first_sentences(sentences: list[str], n: int) -> str:
         empty_str = ""
         return empty_str
     sliced_sentence_list = sentences[:n]
+    # ['You wrote a bad song', 'This is a good idea', 'Just buy the tree']
+
     final_str = functools.reduce(join, sliced_sentence_list)
     return final_str + "."
 
@@ -198,6 +200,7 @@ for hero, damage in zip(heroes, dmg):
 
 # Jetzt hast du eine fertige Liste, die du weitergeben kannst
 print(stats)
+#['Gimli fügt 150 Schaden zu.', 'Legolas fügt 220 Schaden zu.']
 
 
 # List compehension
