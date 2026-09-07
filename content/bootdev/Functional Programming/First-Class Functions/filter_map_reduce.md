@@ -8,6 +8,68 @@ layout = "simple"
 summary = "🚀 simple examples of lambda, filter and reduce"
 +++
 
+> nested mapping & nested join()
+
+```python
+# mapping
+
+lst = [100, 200, 300]
+
+print(type(lst[0]))
+
+#map_lst = list(map(lambda x : str(x), lst))
+map_lst = list(map(str, lst))
+
+print(map_lst)
+
+
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+
+
+
+
+map_nested = list(map(lambda sublist: list(map(str, sublist)), matrix))
+
+map_nested = [[str(item) for item in sublist] for sublist in matrix]    # list comprehension
+
+
+print(map_nested)
+
+
+print("**********************")
+
+
+test_lst = list(map(str, matrix))
+
+#test_lst1 = list(lambda x : list(map(str, matrix))
+
+#print(test_lst1)
+
+
+#double_lst = [[item*2 for item in sublist] for sublist in matrix]
+double_lst1 = list(map(lambda sublist: list(map(lambda item: item * 2, sublist)), matrix))
+
+double_lst2 = list(map(lambda sublist: 2 * list(map(lambda item: item * 2, sublist)), matrix))
+print(double_lst1)
+print(double_lst2)
+
+
+# join
+
+matrix = [
+    ["Customer ID", "Billed", "Paid"],
+    ["1", "100", "100"],
+    ["2", "400", "99"],
+    ["3", "50", "25"],
+]
+
+
+output = "\n".join(list(map(",".join, matrix)))
+output = "\n".join([",".join(row) for row in matrix])   # list comprehension
+print(output)
+```
+
 ```python
 from functools import reduce
 

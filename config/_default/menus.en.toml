@@ -37,6 +37,14 @@
   url = "/python_certification/pcap/" # Direkte Ziel-URL
   weight = 20
 
+# Untermenüpunkt: Build An AI Bot
+[[main]]
+  name = "Build An AI Bot"
+  identifier = "build_ai_bot"
+  parent = "bootdev"
+  url = "/bootdev/build_ai_bot/" # Direkte Ziel-URL
+  weight = 21
+
 # Untermenüpunkt: Functional Programming
 [[main]]
   name = "Functional Programming"
