@@ -8,6 +8,38 @@ layout = "simple"
 summary = "🚀 Python_generators_3"
 +++
 
+> Generators & Yield - Boot.dev
+
+```python
+def create_message_generator():
+    yield "hi"
+    yield "there"
+    yield "friend"
+
+
+gen = create_message_generator()
+print(next(gen))  # hi
+print(next(gen))  # there
+print(next(gen))  # friend
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+def create_counter():
+    count = 0
+    while True:
+        yield count
+        count += 1
+
+
+for count in create_counter():
+    print(count)
+    if count == 2:
+        break
+# 0
+# 1
+# 2
+```
+
 ```python
 import sys
 
