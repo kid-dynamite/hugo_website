@@ -8,6 +8,65 @@ layout = "simple"
 summary = "🚀 Linked_Lists"
 +++
 
+> Linked List - append & insert
+
+```python
+class LinkedList:
+    head: Node | None
+
+    def __init__(self) -> None:
+        self.head = None
+
+    def __iter__(self):
+        node = self.head
+        while node is not None:
+            yield node
+            node = node.next
+
+    def prepend(self, val) -> None:
+        """Fügt ein neues Element am Anfang der Liste hinzu."""
+        new_node = Node(val)
+        # 1. Der neue Knoten zeigt auf den aktuellen Kopf der Liste
+        new_node.next = self.head
+        # 2. Der neue Knoten wird zum neuen Kopf
+        self.head = new_node
+
+    def append(self, val) -> None:
+        """Fügt ein neues Element am Ende der Liste hinzu."""
+        new_node = Node(val)
+
+        # Falls die Liste leer ist, wird der neue Knoten der Kopf
+        if self.head is None:
+            self.head = new_node
+            return
+
+        # Sonst: Durchlaufen bis zum letzten Knoten
+        last_node = self.head
+        while last_node.next is not None:
+            last_node = last_node.next
+
+        # Den letzten Knoten auf den neuen Knoten zeigen lassen
+        last_node.next = new_node
+
+    def insert_after(self, target_val, val) -> bool:
+        """Fügt ein neues Element nach einem bestimmten Wert ein."""
+        current = self.head
+
+        # Suchen nach dem Knoten mit dem Zielwert
+        while current is not None and current.val != target_val:
+            current = current.next
+
+        # Wenn der Wert nicht gefunden wurde
+        if current is None:
+            return False
+
+        # Neuen Knoten einfügen
+        new_node = Node(val)
+        new_node.next = current.next
+        current.next = new_node
+        return True
+```
+
 > Boot.dev exercise
 
 ```python

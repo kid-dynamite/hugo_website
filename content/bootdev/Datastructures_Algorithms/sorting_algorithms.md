@@ -8,6 +8,30 @@ layout = "simple"
 summary = "🚀 Sorting Algorithms"
 +++
 
+> Fibonacci-iteration
+
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+
+    for _ in range(n):
+        a, b = b, a + b  # Der magische Schritt
+
+    return a
+
+print(fib(1))
+
+"""
+
+    [ a ]    [ b ]
+      │        │
+      ▼        ▼
+    [ b ]  [ a + b ]
+
+
+"""
+```
+
 > Fibonacci-Iteration
 
 ```python
