@@ -24,10 +24,16 @@
   weight = 2
 
 [[main]]
+  name = "Video Courses"
+  identifier = "courses"
+  url = "/video_courses/"             # Wieder als URL mit Slash am Ende
+  weight = 3
+
+[[main]]
   name = "AI"
   identifier = "ai"
   url = "/ai/"             # Wieder als URL mit Slash am Ende
-  weight = 3
+  weight = 4
 
 # Untermenüpunkt: PCAP
 [[main]]

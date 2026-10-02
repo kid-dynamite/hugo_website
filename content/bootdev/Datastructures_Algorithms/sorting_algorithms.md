@@ -51,6 +51,29 @@ def fib(n: int) -> int:
 
 ```
 
+> Quick Sort Rekursiv
+
+```python
+def quick_sort(numbers):
+    if len(numbers) <= 1:
+        return numbers
+
+    pivot = numbers[0]
+    lower = []
+    equal = []
+    higher = []
+
+    for number in numbers:
+        if number < pivot:
+            lower.append(number)
+        elif number > pivot:
+            higher.append(number)
+        else:
+            equal.append(number)
+
+    return quick_sort(lower) + equal + quick_sort(higher)
+```
+
 > Quick Sort
 
 ```python

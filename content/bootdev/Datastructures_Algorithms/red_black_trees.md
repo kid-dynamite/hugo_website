@@ -8,6 +8,164 @@ layout = "simple"
 summary = "🚀 Red Black Trees"
 +++
 
+> Fix Insert Beispiel
+
+# Visualisierung: fix_insert im Rot-Schwarz-Baum
+
+Wir spielen das einfachste Szenario durch: Wir erzeugen einen **"Zick-Zack"-Konflikt (Right-Left)**, der sowohl das Umfärben als auch die Rotationen triggert.
+
+## Die Ausgangslage
+
+Wir haben bereits zwei Zahlen eingefügt: **10** und **20**. Der Baum sieht im Speicher so aus:
+
+- **10** ist die Wurzel (`self.root`) und ist **SCHWARZ**.
+- **20** hängt rechts an der 10 (`10.right`) und ist **ROT** (weil neue Knoten immer rot starten).
+
+```text
+    10 (Schwarz)
+      \
+       20 (Rot)
+```
+
+---
+
+## Der Start: Wir fügen die 15 ein
+
+Jetzt rufen wir `insert(15)` auf:
+
+1.  **Einfügen:** Die `insert`-Methode läuft durch. Die 15 landet links unter der 20 (`20.left`).
+2.  **Farbe:** Die 15 startet als **ROT**.
+
+So sieht der Baum direkt nach dem Einfügen aus (Zick-Zack-Form):
+
+```text
+    10 (Schwarz)
+      \
+       20 (Rot)
+      /
+    15 (Rot)  <-- Neuer Knoten
+```
+
+> [!CAUTION]
+> **Das Problem:** Wir haben jetzt zwei rote Knoten direkt untereinander (20 ist rot, 15 ist rot). Das ist im Rot-Schwarz-Baum strengstens verboten!
+
+**Der Aufruf:** Am Ende von `insert` wird `self.fix_insert(new_node)` aufgerufen (wobei `new_node` die 15 ist).
+
+---
+
+## Jetzt geht fix_insert los (Schritt für Schritt)
+
+### 1. Die Schleifen-Bedingung prüfen
+
+```python
+while self.root is not new_node and new_node.parent.red:
+```
+
+- Ist `new_node` (15) die Wurzel? **Nein** (Wurzel ist 10).
+- Ist der Vater (20) rot? **Ja!**
+- **Ergebnis:** Wir gehen in die `while`-Schleife rein.
+
+### 2. Wer ist wer? (Die Verwandten bestimmen)
+
+```python
+parent = new_node.parent        # parent ist die 20
+grandparent = parent.parent     # grandparent ist die 10
+```
+
+### 3. Die Weichenstellung (Sind wir links oder rechts?)
+
+```python
+if parent is grandparent.right:
+```
+
+- Ist `parent` (20) das rechte Kind von `grandparent` (10)? **Ja!**
+- Wir gehen also in den ersten großen Hauptblock.
+
+### 4. Wer ist der Onkel?
+
+```python
+uncle = grandparent.left
+```
+
+- Was hängt links an der 10? Da ist noch nichts, also zeigt `grandparent.left` auf `self.nil`.
+- Unser `uncle` ist also `self.nil`.
+
+### 5. Onkel-Check (Fall A oder Fall B?)
+
+```python
+if uncle.red:
+```
+
+- Ist der Onkel (`self.nil`) rot? **Nein, `self.nil` ist immer schwarz!**
+- Der `if`-Block wird übersprungen. Wir landen im `else`-Block (**Fall B: Onkel ist schwarz**).
+
+### 6. Das Zick-Zack auflösen (Die erste Rotation)
+
+Wir sind jetzt hier im Code:
+
+```python
+if new_node is parent.left:
+    new_node = parent
+    self.rotate_right(new_node)
+    parent = new_node.parent
+    grandparent = parent.parent
+```
+
+- Ist `new_node` (15) das left Kind von `parent` (20)? **Ja, es ist ein Zick-Zack!**
+- `new_node = parent`: Unsere Variable `new_node` springt hoch und zeigt jetzt auf die 20.
+- `self.rotate_right(20)`: Wir rotieren die 20 nach rechts unten.
+  - _Was passiert im Baum?_ Die 15 rutscht hoch und wird der neue Vater der 20.
+  - Die 10 zeigt jetzt rechts auf die 15, und unter der 15 hängt rechts die 20.
+- **Wichtig für den Fix:** Wir aktualisieren die Verwandten. `parent` ist jetzt die 15, `grandparent` ist immer noch die 10.
+
+Aus dem Zick-Zack (`10 -> 20 -> 15`) ist jetzt eine **gerade Linie nach rechts** geworden:
+
+```text
+    10 (Schwarz)
+      \
+       15 (Rot)
+         \
+          20 (Rot)
+```
+
+### 7. Das Finale: Den Baum gerade biegen
+
+Jetzt führt der Code den Rest des `else`-Blocks aus:
+
+```python
+parent.red = False           # Die 15 (parent) wird SCHWARZ
+grandparent.red = True       # Die 10 (grandparent) wird ROT
+self.rotate_left(grandparent) # Wir rotieren um die 10 nach links!
+```
+
+- _Was passiert bei `rotate_left(10)`?_ Die 15 (die schwarz ist) rutscht ganz nach oben und wird die neue **Wurzel** des Baums.
+- Links unter der 15 hängt jetzt die 10 (die rot ist).
+- Rechts unter der 15 hängt die 20 (die rot ist).
+
+### 8. Die Schleife endet
+
+Im nächsten Durchlauf prüft die `while`-Schleife:
+
+- Ist `new_node.parent.red` noch wahr?
+- `new_node` ist immer noch das Objekt 20. Dessen Vater ist jetzt die 15. Die 15 ist aber schwarz!
+- Die Bedingung ist **falsch**. Die Schleife bricht ab.
+
+Ganz am Ende der Methode sorgt `self.root.red = False` dafür, dass die neue Wurzel (15) garantiert schwarz bleibt.
+
+---
+
+## Das Ergebnis im Kopf
+
+Wir haben mit einer schiefen Kette angefangen und enden mit einem perfekt balancierten Dreieck:
+
+```text
+      15 (Schwarz)
+     /  \
+    10    20   (Beide Rot)
+```
+
+Mit diesem kleinen 3-Schritte-Szenario hast du im Kopf exakt die komplizierteste Route genommen, die der Code anbietet (Zick-Zack auflösen, Umfärben, finale Rotation).
+
 > Fix Insert
 
 ```python
