@@ -8,6 +8,31 @@ layout = "simple"
 summary = "🚀 Linked_Lists"
 +++
 
+> Boot.dev Training Ground
+
+```python
+class Node:
+    def __init__(self, value, next_node=None):
+        self.value = value
+        self.next = next_node
+
+
+def linked_list_values(head):
+    values = []
+    current = head
+    while current is not None:
+        values.append(current.value)
+        current = current.next
+    return values
+
+
+head = Node("map", Node("key", Node("potion")))
+linked_list_values(head)
+
+print(linked_list_values(head))
+# ["map", "key", "potion"]
+```
+
 > Linked List - append & insert
 
 ```python
@@ -84,10 +109,23 @@ class Node:
 
 
 class LinkedList:
-    head: Node | None
+    # head: Node | None
 
     def __init__(self) -> None:
         self.head = None
+
+    def add_to_head(self, node: Node) -> None:
+        node.set_next(self.head)
+        self.head = node
+
+    def add_to_tail(self, node: Node) -> None:
+        if self.head is None:
+            self.head = node
+            return
+        last_node = self.head
+        for current_node in self:   # greift auf __iter__ zurück und checkt alle Knoten
+            last_node = current_node
+        last_node.set_next(node)
 
     def __iter__(self):
         # 1. Startpunkt beim Kopf der Liste setzen
@@ -113,6 +151,18 @@ for node in ll:
 # first
 # second
 # third
+
+
+python_liste = list(ll)
+print(python_liste)
+# [first, second, third]
+
+such_knoten = ll.head.next  # Das ist das echte Node-Objekt von "second"
+
+if such_knoten in ll:
+    print("Gefunden!")
+# Gefunden!
+
 ```
 
 > Basics

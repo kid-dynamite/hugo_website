@@ -1,12 +1,70 @@
 +++
 date = '2026-09-23T12:14:46+02:00'
 draft = false
-title = 'Hashmaps'
+title = 'Hashmaps + Subset Sum Problem'
 showAuthor = false
 weight =15
 layout = "simple"
-summary = "🚀 Hashmaps"
+summary = "🚀 Hashmaps + Subset Sum Problem"
 +++
+
+> Subset Sum Problem
+
+```python
+def subset_sum(nums: list[int], target: int) -> bool:
+    # Wir starten die Suche beim letzten Index der Liste (len(nums) - 1)
+    return find_subset_sum(nums, target, len(nums) - 1)
+
+
+def find_subset_sum(nums: list[int], target: int, index: int) -> bool:
+    # Basisfall 1: Wenn das Ziel exakt 0 erreicht hat, haben wir eine Kombination gefunden!
+    if target == 0:
+        return True
+
+    # Basisfall 2: Wenn der Index unter 0 rutscht und das Ziel nicht 0 ist,
+    # haben wir alle Zahlen dieser Kombination erfolglos durchsucht.
+    if index < 0 and target != 0:
+        return False
+
+    # Fall A: Die aktuelle Zahl ist größer als das restliche Ziel.
+    # Wir MÜSSEN sie überspringen (Index um 1 verringern, Ziel bleibt gleich).
+    if nums[index] > target:
+        return find_subset_sum(nums, target, index - 1)
+
+    # Fall B: Die Zahl würde theoretisch passen. Wir probieren beide Wege aus:
+    else:
+        # Weg 1: Wir lassen die Zahl weg (Ziel bleibt gleich)
+        exclude_current = find_subset_sum(nums, target, index - 1)
+
+        # Weg 2: Wir nehmen die Zahl mit (Ziel verringert sich um den Wert der Zahl)
+        include_current = find_subset_sum(nums, target - nums[index], index - 1)
+
+        # Wenn einer der beiden Wege True ergibt, liefert die gesamte Funktion True
+        return exclude_current or include_current
+
+
+# ==========================================
+# Werte zum Einsetzen und Ausprobieren:
+# ==========================================
+
+# Beispiel 1: Das erfolgreiche Beispiel aus der Erklärung (1 + 5 = 6)
+influencer_liste_1 = [1, 2, 5]
+ziel_1 = 6
+ergebnis_1 = subset_sum(influencer_liste_1, ziel_1)
+print(f"Test 1: Finden wir {ziel_1} in {influencer_liste_1}? -> {ergebnis_1}")  # Erwartet: True
+
+# Beispiel 2: Das Gegenbeispiel (Keine Kombination ergibt 6)
+influencer_liste_2 = [2, 5]
+ziel_2 = 6
+ergebnis_2 = subset_sum(influencer_liste_2, ziel_2)
+print(f"Test 2: Finden wir {ziel_2} in {influencer_liste_2}? -> {ergebnis_2}")  # Erwartet: False
+
+# Beispiel 3: Ein etwas größeres Rätsel (2 + 3 + 5 = 10)
+influencer_liste_3 = [2, 3, 5, 8]
+ziel_3 = 10
+ergebnis_3 = subset_sum(influencer_liste_3, ziel_3)
+print(f"Test 3: Finden wir {ziel_3} in {influencer_liste_3}? -> {ergebnis_3}")  # Erwartet: True
+```
 
 > Linear Probing
 
